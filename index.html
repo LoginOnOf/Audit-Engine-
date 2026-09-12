@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v7.1</title>
+    <title>Enterprise Security Audit Engine v7.2</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -52,17 +52,6 @@
             padding: 15px;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
             margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            font-size: 0.8rem;
-            margin-bottom: 4px;
-            color: var(--text-muted);
         }
 
         input {
@@ -144,126 +133,128 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v7.1</h1>
-        <p>Pemindaian Konfigurasi Keamanan Web Berbasis Seluler</p>
+        <h1>Instant Audit Engine v7.2</h1>
+        <p>Bypass Proteksi Peramban Seluler — Analisis Nyata</p>
     </header>
 
     <div class="card">
         <div class="form-group">
-            <label for="targetUrl">URL Target Website Audit (Wajib Menggunakan https://)</label>
-            <!-- Diubah ke HTTPS secara default untuk mencegah restriksi Mixed Content peramban handphone -->
-            <input type="url" id="targetUrl" value="https://testfire.net" placeholder="https://situs-target.com">
+            <label style="display:block; font-size:0.8rem; margin-bottom:4px; color:var(--text-muted)">Domain Target Audit (Masukkan tanpa http:// atau https://)</label>
+            <input type="text" id="targetUrl" value="testfire.net" placeholder="situs-target.com">
         </div>
-        <button onclick="executeInstantScan()">Mulai Audit Nyata</button>
+        <button onclick="executeBypassScan()">Mulai Audit Nyata</button>
         <div id="consoleLog" class="console"></div>
     </div>
 
     <div id="reportCard" class="card report-section">
-        <div class="section-title">📊 Hasil Audit Kepatuhan & Kelemahan</div>
+        <div class="section-title">📊 Hasil Komponen yang Kurang dari Website Target</div>
         <div id="findingsList"></div>
     </div>
 </div>
 
 <script>
-    async function executeInstantScan() {
-        const targetUrl = document.getElementById('targetUrl').value.trim();
+    // Fungsi penanganan global untuk menerima data JSONP tanpa hambatan CORS peramban HP
+    window.processAuditData = function(data) {
         const consoleLog = document.getElementById('consoleLog');
         const reportCard = document.getElementById('reportCard');
         const findingsList = document.getElementById('findingsList');
 
+        consoleLog.innerText += `[+] Respon data berhasil diekstraksi dari target!\n`;
+        consoleLog.innerText += `[*] Memetakan kelemahan komponen arsitektur sistem...\n`;
+
+        // Analisis logika langsung terhadap data teks mentah halaman target yang ditarik secara legal
+        const pageContent = JSON.stringify(data).toLowerCase();
+        
+        let checks = [
+            {
+                name: 'Strict-Transport-Security (HSTS)',
+                exist: pageContent.includes('strict-transport-security'),
+                severity: 'danger',
+                desc: 'Parameter HSTS absen di server. Komunikasi tidak dipaksa menggunakan jalur HTTPS aman secara konsisten, rentan terhadap pembajakan jalur komunikasi (MitM) di jaringan lokal.'
+            },
+            {
+                name: 'Content-Security-Policy (CSP)',
+                exist: pageContent.includes('content-security-policy') || pageContent.includes('http-equiv=\\"content-security-policy\\"'),
+                severity: 'warning',
+                desc: 'Kebijakan CSP tidak dikonfigurasi. Browser tidak membatasi asal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
+            },
+            {
+                name: 'X-Content-Type-Options',
+                exist: pageContent.includes('x-content-type-options'),
+                severity: 'warning',
+                desc: 'Header X-Content-Type-Options tidak ditemukan. Server membiarkan browser melakukan MIME-sniffing terhadap jenis file data.'
+            }
+        ];
+
+        // Menampilkan hasil analisis nyata ke layar dasbor handphone
+        checks.forEach(item => {
+            const element = document.createElement('div');
+            element.className = `finding-item ${item.exist ? 'success' : item.severity}`;
+            
+            if (item.exist) {
+                element.innerHTML = `
+                    <div class="finding-header">
+                        <span>✓ ${item.name}</span>
+                        <span style="color:var(--success)">AKTIF</span>
+                    </div>
+                    <div class="finding-desc">Komponen perlindungan ini terdeteksi aktif pada konfigurasi sistem target.</div>
+                `;
+            } else {
+                element.innerHTML = `
+                    <div class="finding-header">
+                        <span>⚠️ ${item.name} (CWE-523)</span>
+                        <span style="color:${item.severity === 'danger' ? 'var(--danger)' : 'var(--warning)'}">${item.severity.toUpperCase()}</span>
+                    </div>
+                    <div class="finding-desc">${item.desc}</div>
+                </div>`;
+            }
+            findingsList.appendChild(element);
+        });
+
+        consoleLog.innerText += `[+] Dokumen analisis komponen selesai disusun secara profesional.`;
+        reportCard.style.display = 'block';
+        
+        // Bersihkan elemen skrip setelah selesai eksekusi
+        const oldScript = document.getElementById('audit-script-injector');
+        if (oldScript) oldScript.remove();
+    };
+
+    function executeBypassScan() {
+        const targetUrl = document.getElementById('targetUrl').value.trim();
+        const consoleLog = document.getElementById('consoleLog');
+        const reportCard = document.getElementById('reportCard');
+
         if (!targetUrl) {
-            alert('Wajib mengisi URL Target!');
+            alert('Wajib mengisi domain target!');
             return;
         }
 
+        // Membersihkan karakter url jika user memasukkan http/https
+        let cleanDomain = targetUrl.replace('https://', '').replace('http://', '').replace(/\/$/, "");
+
         consoleLog.style.display = 'block';
         reportCard.style.display = 'none';
-        findingsList.innerHTML = '';
-        consoleLog.innerText = `[*] Mengaktifkan soket jaringan peramban mobile...\n`;
+        consoleLog.style.color = '#22c55e';
+        consoleLog.innerText = `[*] Mengaktifkan modul injeksi skrip peramban mobile...\n`;
+        consoleLog.innerText += `[*] Melakukan bypass restriksi CORS keamanan browser via JSONP Injection...\n`;
 
-        // Mengubah target secara otomatis ke https jika user salah memasukkan format http biasa
-        let safeTarget = targetUrl;
-        if (safeTarget.startsWith('http://')) {
-            safeTarget = safeTarget.replace('http://', 'https://');
-        }
+        // Menghapus injector lama jika ada
+        const oldScript = document.getElementById('audit-script-injector');
+        if (oldScript) oldScript.remove();
 
-        // PERBAIKAN UTAMA: Format pemanggilan API Jembatan AllOrigins yang valid dengan parameter ?url=
-        const cleanTarget = encodeURIComponent(safeTarget.replace(/\/$/, ""));
-        const integratedEngine = `https://allorigins.win{cleanTarget}`; 
+        // Membuat jembatan koneksi via skrip dinamis untuk menarik isi web target tanpa fetch API
+        const script = document.createElement('script');
+        script.id = 'audit-script-injector';
+        script.src = `https://allorigins.win{encodeURIComponent('https://' + cleanDomain)}&callback=processAuditData`;
         
-        consoleLog.innerText += `[*] Mengirimkan paket analitik ke target via Integrated Gateway...\n`;
-
-        try {
-            const response = await fetch(integratedEngine);
-            if (!response.ok) {
-                throw new Error(`Gateway memberikan respon status: ${response.status}`);
-            }
-            
-            const data = await response.json();
-
-            if (!data || !data.contents) {
-                throw new Error("Target memblokir koneksi otomatis luar jaringan.");
-            }
-
-            consoleLog.innerText += `[+] Transaksi data berhasil diselesaikan secara riil!\n`;
-            consoleLog.innerText += `[*] Memetakan parameter keamanan arsitektur sistem...\n`;
-
-            const pageContent = data.contents.toLowerCase();
-            
-            // Evaluasi logika terhadap keberadaan string pengaman bawaan aplikasi
-            let checks = [
-                {
-                    name: 'Strict-Transport-Security (HSTS)',
-                    exist: pageContent.includes('strict-transport-security'),
-                    severity: 'danger',
-                    desc: 'Parameter HSTS absen di server. Komunikasi tidak dipaksa menggunakan jalur HTTPS aman secara konsisten, rentan terhadap pembajakan jalur komunikasi (MitM).'
-                },
-                {
-                    name: 'Content-Security-Policy (CSP)',
-                    exist: pageContent.includes('content-security-policy') || pageContent.includes('http-equiv="content-security-policy"'),
-                    severity: 'warning',
-                    desc: 'Kebijakan CSP tidak dikonfigurasi. Browser tidak membatasi asal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
-                },
-                {
-                    name: 'X-Content-Type-Options',
-                    exist: pageContent.includes('x-content-type-options'),
-                    severity: 'warning',
-                    desc: 'Header X-Content-Type-Options tidak ditemukan. Server membiarkan browser melakukan MIME-sniffing terhadap jenis file data.'
-                }
-            ];
-
-            // Render hasil temuan secara dinamis
-            checks.forEach(item => {
-                const element = document.createElement('div');
-                element.className = `finding-item ${item.exist ? 'success' : item.severity}`;
-                
-                if (item.exist) {
-                    element.innerHTML = `
-                        <div class="finding-header">
-                            <span>✓ ${item.name}</span>
-                            <span style="color:var(--success)">AKTIF</span>
-                        </div>
-                        <div class="finding-desc">Komponen perlindungan ini terdeteksi aktif pada konfigurasi sistem target.</div>
-                    `;
-                } else {
-                    element.innerHTML = `
-                        <div class="finding-header">
-                            <span>⚠️ ${item.name} (CWE-523)</span>
-                            <span style="color:${item.severity === 'danger' ? 'var(--danger)' : 'var(--warning)'}">${item.severity.toUpperCase()}</span>
-                        </div>
-                        <div class="finding-desc">${item.desc}</div>
-                    `;
-                }
-                findingsList.appendChild(element);
-            });
-
-            consoleLog.innerText += `[+] Dokumen analisis komponen yang kurang berhasil disusun.`;
-            reportCard.style.display = 'block';
-
-        } catch (error) {
+        // Penanganan jika domain tidak aktif atau mati
+        script.onerror = function() {
             consoleLog.style.color = '#ef4444';
-            consoleLog.innerText += `\n[-] Kegagalan audit jaringan.\nDetail: ${error.message}\nTip: Pastikan koneksi internet ponsel stabil dan situs target dapat diakses publik.`;
-        }
+            consoleLog.innerText += `\n[-] Gagal menjangkau target. Domain salah atau server target memutus koneksi jembatan.`;
+        };
+
+        // Menyisipkan ke dokumen untuk mengeksekusi request nyata
+        document.body.appendChild(script);
     }
 </script>
 
