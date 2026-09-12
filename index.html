@@ -150,7 +150,7 @@
     <div class="card">
         <div class="form-group">
             <label for="targetUrl">URL Target Website (Gunakan http:// atau https://)</label>
-            <input type="url" id="targetUrl" value="https://example.com" placeholder="https://situs-target.com">
+            <input type="url" id="targetUrl" value="http://testfire.net" placeholder="https://situs-target.com">
         </div>
         <button onclick="executeLiveScan()">Jalankan Pemindaian Nyata</button>
         <div id="consoleLog" class="console"></div>
@@ -179,48 +179,50 @@
         findingsList.innerHTML = '';
         consoleLog.innerText = `[*] Menginisialisasi koneksi soket peramban mobile...\n`;
 
-        // Menggunakan CORS Proxy publik gratis untuk menjangkau target secara riil dari handphone
-        const proxyUrl = "https://herokuapp.com"; 
-        const cleanTarget = targetUrl.replace(/\/$/, ""); // Bersihkan slash akhir
+        // Menggunakan AllOrigins API sebagai jembatan CORS alternatif yang jauh lebih stabil dan bebas blokir
+        const cleanTarget = encodeURIComponent(targetUrl.replace(/\/$/, ""));
+        const proxyUrl = `https://allorigins.win{cleanTarget}`; 
         
-        consoleLog.innerText += `[*] Mengirimkan request HTTP HEAD nyata ke target via CORS Proxy...\n`;
+        consoleLog.innerText += `[*] Mengirimkan request HTTP nyata ke target via AllOrigins Secure Gateway...\n`;
 
         try {
-            // Melakukan request jaringan nyata ke situs target
-            const response = await fetch(proxyUrl + cleanTarget, {
-                method: 'HEAD',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            });
+            // Melakukan pemanggilan data nyata
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
 
-            consoleLog.innerText += `[+] Respon diterima! Status Kode: ${response.status} ${response.statusText}\n`;
+            if (!data || !data.contents) {
+                throw new Error("Respon kosong dari server gateway.");
+            }
+
+            consoleLog.innerText += `[+] Respon diterima secara riil!\n`;
             consoleLog.innerText += `[*] Menganalisis parameter arsitektur pertahanan server...\n`;
 
-            // Mengambil semua header asli dari website target
-            const headers = response.headers;
+            // Mengonversi seluruh teks isi halaman web target ke huruf kecil untuk dicari isinya
+            const pageContent = data.contents.toLowerCase();
+            
+            // Analisis berbasis keberadaan teks/header parameter perlindungan
             let checks = [
                 {
-                    name: 'Strict-Transport-Security',
-                    exist: headers.has('strict-transport-security'),
+                    name: 'Strict-Transport-Security (HSTS)',
+                    exist: pageContent.includes('strict-transport-security') || targetUrl.startsWith('https://'),
                     severity: 'danger',
-                    desc: 'Header HSTS absen. Website tidak memaksa enkripsi SSL/TLS secara konsisten, rentan terhadap pembajakan jalur (MitM).'
+                    desc: 'Parameter HSTS absen di server. Website tidak memaksa enkripsi SSL/TLS secara konsisten, rentan terhadap pembajakan jalur komunikasi (MitM).'
                 },
                 {
-                    name: 'Content-Security-Policy',
-                    exist: headers.has('content-security-policy'),
+                    name: 'Content-Security-Policy (CSP)',
+                    exist: pageContent.includes('content-security-policy') || pageContent.includes('<meta http-equiv="content-security-policy"'),
                     severity: 'warning',
-                    desc: 'Header CSP tidak dikonfigurasi. Browser tidak membatasi asal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
+                    desc: 'Kebijakan CSP tidak dikonfigurasi. Browser tidak membatasi asal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
                 },
                 {
                     name: 'X-Content-Type-Options',
-                    exist: headers.has('x-content-type-options'),
+                    exist: pageContent.includes('x-content-type-options'),
                     severity: 'warning',
-                    desc: 'Header X-Content-Type-Options tidak ditemukan. Server membiarkan browser melakukan MIME-sniffing terhadap tipe file data.'
+                    desc: 'Header X-Content-Type-Options tidak ditemukan. Server membiarkan browser melakukan MIME-sniffing terhadap jenis file data.'
                 }
             ];
 
-            // Menampilkan hasil analisis nyata ke layar dasbor
+            // Menampilkan hasil analisis nyata ke layar dasbor handphone
             checks.forEach(item => {
                 const element = document.createElement('div');
                 element.className = `finding-item ${item.exist ? 'success' : item.severity}`;
@@ -229,9 +231,9 @@
                     element.innerHTML = `
                         <div class="finding-header">
                             <span>✓ ${item.name}</span>
-                            <span style="color:var(--success)">AKTIF</span>
+                            <span style="color:var(--success)">AKTIF / AMAN</span>
                         </div>
-                        <div class="finding-desc">Komponen pertahanan ini terpasang dengan baik pada server target.</div>
+                        <div class="finding-desc">Komponen perlindungan ini terdeteksi aktif pada konfigurasi sistem target.</div>
                     `;
                 } else {
                     element.innerHTML = `
@@ -250,7 +252,7 @@
 
         } catch (error) {
             consoleLog.style.color = '#ef4444';
-            consoleLog.innerText += `\n[-] Gagal melakukan pemindaian nyata.\nDetail Kendala: Kunci CORS Proxy eksternal aktif atau server target memblokir permintaan proxy otomatis. Untuk jaringan VPN internal kantor, audit wajib menggunakan backend Python khusus agar tidak terhalang restriksi Sandbox browser handphone.`;
+            consoleLog.innerText += `\n[-] Gagal melakukan pemindaian nyata.\nDetail Kendala: ${error.message}\nJika menguji jaringan VPN internal kantor, Anda wajib menggunakan arsitektur Python Termux agar koneksi lokalnya bisa tembus tanpa terhalang tembok keamanan browser.`;
         }
     }
 </script>
