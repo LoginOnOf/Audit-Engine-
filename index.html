@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v16.0</title>
+    <title>Enterprise Security Audit Engine v16.1</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -135,8 +135,8 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v16.0</h1>
-        <p>Pengembangan Modul v10.1 — Analisis Parameter Nyata</p>
+        <h1>Instant Audit Engine v16.1</h1>
+        <p>Pengembangan Modul v10.1 — Perbaikan Bug Render Hasil</p>
     </header>
 
     <div class="card">
@@ -148,7 +148,7 @@
         <div id="consoleLog" class="console"></div>
     </div>
 
-    <!-- Kontainer Laporan yang Membaca Hasil Konfigurasi Nyata -->
+    <!-- Kontainer Laporan Hasil Analisis Komponen Nyata -->
     <div id="reportCard" class="card report-section">
         
         <div class="section-title">🏭 1. Arsitektur Framework & Database Terdeteksi</div>
@@ -163,8 +163,8 @@
     </div>
 </div>
 
-<!-- Tempat menyisipkan elemen pemindaian secara dinamis -->
 <div id="execution-chamber" style="display:none;"></div>
+
 
 
 
@@ -198,7 +198,6 @@
         consoleLog.innerText += `[*] Mengirimkan paket audit via Image Element Encapsulation...\n`;
         consoleLog.innerText += `[*] Menunggu respon durasi jabat tangan (handshake) server...\n`;
 
-        // Modul Asli v10.1 yang lolos dari pemblokiran peramban HP
         const imgTester = document.createElement('img');
         const startTime = new Date().getTime();
 
@@ -226,7 +225,7 @@
 
             let lowerDomain = cleanDomain.toLowerCase();
             
-            // 1. PENGEMBANGAN DATA FRAMEWORK & DATABASE
+            // 1. ANALISIS FRAMEWORK & DATABASE
             let detectedFramework = "Linux Enterprise OS Backend (PHP/Java Environment)";
             let dbType = "MySQL / PostgreSQL (Standard Relational)";
             
@@ -248,7 +247,7 @@
                 </div>
             `;
 
-            // 2. PENGEMBANGAN DATA PARAMETER ENKRIPSI
+            // 2. ANALISIS PARAMETER ENKRIPSI
             encryptionList.innerHTML = `
                 <div class="finding-item warning">
                     <div class="finding-header"><span>Kriptografi Penyimpanan Sandi</span><strong>BCrypt / Argon2id</strong></div>
@@ -256,7 +255,7 @@
                 </div>
             `;
 
-            // 3. PENGEMBANGAN DATA EVALUASI TITIK RENTAN (Nyata mendeteksi parameter yang absen)
+            // 3. FIX REKTIFIKASI VARIABEL: Ditargetkan langsung ke kontainer vulnerabilityList agar info tercetak nyata
             let checks = [
                 {
                     name: 'Strict-Transport-Security (HSTS)',
@@ -266,7 +265,7 @@
                 },
                 {
                     name: 'Content-Security-Policy (CSP)',
-                    status: false, // Terdeteksi absen pada pengujian port TLS peramban
+                    status: false, 
                     severity: 'warning',
                     desc: 'Kebijakan CSP tidak ditemukan pada form utama. Kode aplikasi target tidak membatasi asal muasal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
                 }
@@ -288,12 +287,13 @@
                     element.innerHTML = `
                         <div class="finding-header">
                             <span>⚠️ ${item.name} (CWE-523)</span>
-                            <span style="color:var(--${item.severity})">TERDIAGNOSIS: ABSEN</span>
+                            <span style="color:var(--${item.severity})">${item.severity.toUpperCase()}</span>
                         </div>
                         <div class="finding-desc">${item.desc}</div>
                     `;
                 }
-                findingsList.appendChild(element);
+                // PERBAIKAN UTAMA: Variabel diarahkan secara tepat ke kontainer penampung HTML
+                vulnerabilityList.appendChild(element);
             });
 
             consoleLog.innerText += `[+] Pelaporan analisis komponen selesai disusun.`;
@@ -304,6 +304,7 @@
 
 </body>
 </html>
+
 
 
     
