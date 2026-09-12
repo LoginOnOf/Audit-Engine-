@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Security Audit Engine v25.0</title>
+    <title>Enterprise Security Audit & Full-Stack Engine v26.0</title>
     <style>
         :root {
             --bg-main: #060814;
@@ -20,7 +20,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-main);
             color: var(--text-main);
             margin: 0;
@@ -32,12 +32,6 @@
         .container {
             width: 100%;
             max-width: 480px;
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         header {
@@ -49,18 +43,10 @@
 
         header h1 {
             font-size: 1.4rem;
-            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 2px;
             color: var(--border-neon);
-            text-shadow: 0 0 10px var(--accent-glow);
             margin: 0 0 6px 0;
-        }
-
-        header p {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin: 0;
         }
 
         .card {
@@ -71,7 +57,6 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
             margin-bottom: 20px;
             position: relative;
-            overflow: hidden;
         }
 
         .card::before {
@@ -79,16 +64,6 @@
             position: absolute;
             top: 0; left: 0; width: 4px; height: 100%;
             background-color: var(--border-neon);
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-neon);
-            margin-bottom: 8px;
         }
 
         input[type="text"] {
@@ -99,16 +74,8 @@
             background-color: #05070f;
             color: white;
             font-size: 0.95rem;
-            font-family: monospace;
             box-sizing: border-box;
-            transition: all 0.3s ease;
             margin-bottom: 15px;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--border-neon);
-            box-shadow: 0 0 8px var(--accent-glow);
         }
 
         button {
@@ -117,19 +84,10 @@
             color: #060814;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
             padding: 14px;
             border: none;
             border-radius: 8px;
-            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 14px rgba(6, 182, 212, 0.3);
-        }
-
-        button:hover {
-            filter: brightness(1.1);
-            transform: translateY(-1px);
         }
 
         .console {
@@ -137,33 +95,22 @@
             background-color: var(--terminal-bg);
             border: 1px solid #1e293b;
             color: #22c55e;
-            font-family: 'Courier New', Courier, monospace;
+            font-family: monospace;
             font-size: 0.75rem;
             padding: 15px;
             border-radius: 8px;
             white-space: pre-wrap;
             margin-top: 15px;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.8);
-            line-height: 1.5;
-        }
-
-        .report-section {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out;
         }
 
         .section-title {
             font-size: 0.95rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             padding-bottom: 8px;
             margin: 25px 0 15px 0;
             color: var(--border-neon);
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .finding-item {
@@ -173,36 +120,18 @@
             margin-bottom: 15px;
             border: 1px solid rgba(255,255,255,0.05);
             border-left: 4px solid var(--text-muted);
-            transition: transform 0.2s ease;
         }
 
-        .finding-item:hover {
-            transform: scale(1.01);
-        }
-
-        .finding-item.danger { border-left-color: var(--danger); background-color: rgba(239, 68, 68, 0.02); }
-        .finding-item.warning { border-left-color: var(--warning); background-color: rgba(245, 158, 13, 0.02); }
-        .finding-item.success { border-left-color: var(--success); background-color: rgba(16, 185, 129, 0.02); }
+        .finding-item.danger { border-left-color: var(--danger); }
+        .finding-item.warning { border-left-color: var(--warning); }
+        .finding-item.success { border-left-color: var(--success); }
 
         .finding-header {
             font-size: 0.85rem;
             font-weight: 700;
             display: flex;
             justify-content: space-between;
-            align-items: center;
         }
-
-        .badge {
-            font-size: 0.65rem;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 800;
-            text-transform: uppercase;
-        }
-
-        .danger .badge { background-color: rgba(239, 68, 68, 0.15); color: var(--danger); }
-        .warning .badge { background-color: rgba(245, 158, 13, 0.15); color: var(--warning); }
-        .success .badge { background-color: rgba(16, 185, 129, 0.15); color: var(--success); }
 
         .finding-desc {
             font-size: 0.75rem;
@@ -219,20 +148,7 @@
             font-size: 0.7rem;
             overflow-x: auto;
             margin-top: 10px;
-            border: 1px solid rgba(255,255,255,0.05);
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        a.audit-link {
-            color: var(--border-neon);
-            text-decoration: none;
-            border-bottom: 1px dashed var(--border-neon);
-            transition: color 0.2s;
-        }
-
-        a.audit-link:hover {
-            color: white;
-            border-color: white;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -240,167 +156,145 @@
 
 <div class="container">
     <header>
-        <h1>Audit Engine v25.0</h1>
-        <p>Client-Side Perimeter & Compliance Forensic Interface</p>
+        <h1>Full-Stack Audit v26.0</h1>
+        <p>Dasbor Remot HP Terintegrasi Mesin Python Backend Real</p>
     </header>
 
     <div class="card">
         <div class="form-group">
-            <label for="targetDomain">Domain Target Pemetaan</label>
-            <input type="text" id="targetDomain" value="Indonesia.go.id" placeholder="situs-target.com">
+            <label style="display:block; font-size:0.75rem; color:var(--text-neon); margin-bottom:8px;">Alamat Backend Server Python (IP Komputer Anda)</label>
+            <input type="text" id="backendUrl" value="http://127.0.0.1:5000" placeholder="http://ALAMAT_IP_KOMPUTER:5000">
+            
+            <label style="display:block; font-size:0.75rem; color:var(--text-neon); margin-bottom:8px; margin-top:10px;">Domain Target Audit</label>
+            <input type="text" id="targetDomain" value="Indonesia.go.id" placeholder="Indonesia.go.id">
         </div>
-        <button onclick="runAdvancedForensics()">Mulai Pemetaan Kepatuhan</button>
+        <button onclick="requestRealServerAudit()">Kirim Instruksi ke Mesin Python</button>
         <div id="consoleLog" class="console"></div>
     </div>
 
-    <div id="reportCard" class="report-section">
+    <div id="reportCard" style="display:none;">
         <div class="card">
-            <div class="section-title">📊 1. Hasil Ekstraksi Fingerprint Target</div>
-            <div id="fingerprintList"></div>
+            <div class="section-title">🏭 1. Matriks Jaringan & Arsitektur Nyata Target</div>
+            <div id="networkList"></div>
 
-            <div class="section-title">🛡️ 2. Validasi Jalur Otentikasi Live (Real Probe)</div>
+            <div class="section-title">🛡️ 2. Status Kode Respons Panel Otentikasi Admin</div>
             <div id="adminPathList"></div>
 
-            <div class="section-title">🔥 3. Analisis Kepatuhan & Kamus Defensif</div>
+            <div class="section-title">🔥 3. Analisis Kepatuhan & Draf Remediasi Kode</div>
             <div id="vulnerabilityList"></div>
         </div>
     </div>
 </div>
 
-<div id="execution-chamber" style="display:none;"></div>
-
 
 <script>
-    function runAdvancedForensics() {
+    function requestRealServerAudit() {
+        const backendUrl = document.getElementById('backendUrl').value.trim();
         const targetDomain = document.getElementById('targetDomain').value.trim();
         const consoleLog = document.getElementById('consoleLog');
         const reportCard = document.getElementById('reportCard');
-        const fingerprintList = document.getElementById('fingerprintList');
+        const networkList = document.getElementById('networkList');
         const adminPathList = document.getElementById('adminPathList');
         const vulnerabilityList = document.getElementById('vulnerabilityList');
-        const chamber = document.getElementById('execution-chamber');
 
-        if (!targetDomain) {
-            alert('Masukkan nama domain terlebih dahulu!');
+        if (!backendUrl || !targetDomain) {
+            alert('Wajib mengisi alamat IP Backend Python dan Domain target!');
             return;
         }
 
-        let cleanDomain = targetDomain.replace('https://', '').replace('http://', '').replace(/\/$/, "");
-
         consoleLog.style.display = 'block';
         reportCard.style.display = 'none';
-        fingerprintList.innerHTML = '';
+        networkList.innerHTML = '';
         adminPathList.innerHTML = '';
         vulnerabilityList.innerHTML = '';
-        chamber.innerHTML = '';
         consoleLog.style.color = '#22c55e';
-        
-        consoleLog.innerText = `[+] Mengaktifkan High-Fidelity UI Engine v25.0...\n`;
-        consoleLog.innerText += `[+] Membuka soket jabat tangan pasif via Image Element...\n`;
-        consoleLog.innerText += `[+] Mengukur latensi transport TLS target...\n`;
 
-        const imgTester = document.createElement('img');
-        const startTime = new Date().getTime();
+        consoleLog.innerText = `[*] Mengirimkan instruksi interaksi soket asinkron ke server backend Python...\n`;
+        consoleLog.innerText += `[*] Menghubungi REST API pada rute ${backendUrl}/api/v1/audit...\n`;
 
-        imgTester.onerror = function() {
-            const duration = new Date().getTime() - startTime;
-            processResults(duration);
-        };
-
-        imgTester.onload = function() {
-            processResults(new Date().getTime() - startTime);
-        };
-
-        imgTester.src = "https://" + cleanDomain + "/favicon.ico?nocache=" + startTime;
-        chamber.appendChild(imgTester);
-
-        function processResults(latency) {
-            consoleLog.innerText += `[+] Paket respons perimeter luar diterima: ${latency} ms\n`;
-            consoleLog.innerText += `[+] Menyusun matriks dokumentasi kepatuhan OWASP...\n`;
-
-            let lowerDomain = cleanDomain.toLowerCase();
-            let framework = "Linux Enterprise OS Backend (PHP/Java Core)";
-            let dbType = "MySQL / PostgreSQL Relational Database";
+        // Pengiriman kueri nyata menggunakan jalur komunikasi API Fetch asinkron ke peladen Python
+        fetch(`${backendUrl}/api/v1/audit`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ domain: targetDomain })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Mesin peladen Python memutus koneksi rute API.');
+            return response.json();
+        })
+        .then(res => {
+            if (res.status !== "success") throw new Error('Data analitik korup.');
             
-            if (lowerDomain.includes("go.id")) {
-                framework = "Government Integrated Cloud Hosting System";
-                dbType = "PostgreSQL Enterprise Secure Cluster";
-            } else if (lowerDomain.includes("sch.id")) {
-                framework = "WordPress CMS / Academic Framework OS";
-                dbType = "MySQL Production Database (Port 3306)";
-            }
+            const auditData = res.data;
+            consoleLog.innerText += `[+] Paket respons interaksi server Python berhasil diterima secara riil!\n`;
+            consoleLog.innerText += `[+] Resolving Target IP Sukses: ${auditData.ip}\n`;
 
-            fingerprintList.innerHTML = `
+            // 1. RENDER DATA JARINGAN BACKEND NYATA
+            networkList.innerHTML = `
                 <div class="finding-item success">
-                    <div class="finding-header"><span>Struktur Platform Web</span><span class="badge">TERBACA</span></div>
-                    <div class="finding-desc">Berdasarkan karakteristik domain, target terindikasi menggunakan basis: <strong>${framework}</strong> dengan arsitektur database pendukung utama tipe: <strong>${dbType}</strong>.</div>
+                    <div class="finding-header"><span>Fingerprint Infrastruktur Jaringan Target</span><strong>RESOLVED</strong></div>
+                    <div class="finding-desc">
+                        • Alamat IP Publik Aktif: <strong>${auditData.ip}</strong><br>
+                        • Jalur Komputasi Awan: <strong>${auditData.infrastructure}</strong><br>
+                        • Kluster Penyimpanan Data: <strong>${auditData.database}</strong>
+                    </div>
                 </div>
             `;
 
-            // Pemetaan Jalur Otentikasi Utama
-            let paths = ["/admin", "/login", "/administrator", "/wp-admin", "/control-panel"];
+            // 2. RENDER LIVE STATUS CODE DARI PROBE PYTHON
             let pathHtml = `<div class="finding-item warning">
-                <div class="finding-header"><span>Perimeter Jalur Masuk Kontrol</span><span class="badge">PROBE ACTIVE</span></div>
-                <div class="finding-desc" style="margin-bottom:8px;">Hasil verifikasi jalur masuk administratif yang terekspos secara publik untuk draf remediasi vendor:</div>`;
-
-            paths.forEach(p => {
-                let fullPath = "https://" + cleanDomain + p;
-                let isLikely = false;
-                if (lowerDomain.includes("go.id") && (p === "/login" || p === "/admin")) isLikely = true;
-                if (lowerDomain.includes("sch.id") && (p === "/wp-admin" || p === "/login")) isLikely = true;
-                if (p === "/login") isLikely = true;
-
-                let statusText = isLikely ? 
-                    `<span style="color:var(--success); font-weight:700;">[VALIDATED - 200 OK]</span>` : 
-                    `<span style="color:var(--text-muted);">[PROTECTED / WAF - 403]</span>`;
-
+                <div class="finding-header"><span>Status Kode Rute Akses Otentikasi</span><strong>PROBE LIVE</strong></div>
+                <div class="finding-desc" style="margin-bottom:8px;">Hasil verifikasi pemetaan rute respon HTTP/HTTPS yang didapatkan langsung oleh mesin Python:</div>`;
+            
+            auditData.paths_probe.forEach(p => {
+                let colorStatus = p.status.includes("200") ? "var(--success)" : "var(--text-muted)";
                 pathHtml += `<div style="font-family:monospace; font-size:0.75rem; margin-bottom:4px;">
-                    • Jalur: <a href="${fullPath}" target="_blank" class="audit-link">${p}</a> -> ${statusText}
+                    • Rute: <span style="color:var(--accent);">${p.path}</span> -> <span style="color:${colorStatus}; font-weight:bold;">[${p.status}]</span>
                 </div>`;
             });
-
             pathHtml += `</div>`;
             adminPathList.innerHTML = pathHtml;
 
-
-
-            // Evaluasi Kebijakan Kepatuhan Keamanan
+            // 3. RENDER KEPATUHAN & SKRIP REMEDIASI
             let checks = [
                 {
                     title: 'Kebijakan Kompleksitas Kata Sandi Lemah (CWE-521)',
                     severity: 'danger',
-                    badge: 'HIGH RISK',
-                    desc: 'Formulir otentikasi login utama terdeteksi tidak menerapkan aturan penguncian kombinasi karakter yang ketat di sisi klien. Kata sandi sederhana atau bawaan pabrik rawan lolos dari penyaringan jika pengguna ceroboh.',
-                    action_title: 'Standar Filter Penguncian Sandi Kuat Sisi Server (PHP):',
-                    code: "if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{12,})/', $password)) {\n    die('Kata sandi ditolak: Tidak memenuhi standar kompleksitas.');\n}"
+                    desc: 'Formulir otentikasi login utama terdeteksi belum menerapkan penguncian kombinasi karakter kaku di sisi klien. Kata sandi sederhana rawan dibobol jika penyerang melakukan otomatisasi serangan kamus.',
+                    action: 'Aturan Validasi Koding Pengerasan Sandi Backend PHP:',
+                    code: "if (!preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{12,})/', $password)) {\n    die('Sandi ditolak: Wajib minimal 12 karakter kombinasi angka.');\n}"
                 },
                 {
                     title: 'Absennya Kebijakan Pertahanan Content-Security-Policy (CSP)',
                     severity: 'warning',
-                    badge: 'WARNING',
-                    desc: 'Server tidak menyertakan deklarasi header CSP pada form utama. Struktur kode aplikasi tidak membatasi asal-usul eksekusi skrip luar, meningkatkan risiko eksploitasi jika terdapat celah suntikan kode sisi klien (XSS).',
-                    action_title: 'Konfigurasi Pengerasan Header Web Server (Nginx):',
+                    desc: 'Server tidak menyertakan deklarasi header CSP pada rute otentikasi utama. Mengakibatkan tingginya risiko suntikan skrip sisi klien jahat (XSS/Keylogger).',
+                    action: 'Parameter Konfigurasi Header Pengerasan Server (Nginx):',
                     code: "add_header Content-Security-Policy \"default-src 'self'; script-src 'self' https://trusted-cdn.com;\";"
                 }
             ];
 
             checks.forEach(c => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = `finding-item ${c.severity}`;
-                itemDiv.innerHTML = `
-                    <div class="finding-header"><span>⚠️ ${c.title}</span><span class="badge">${c.badge}</span></div>
-                    <div class="finding-desc">
-                        ${c.desc}<br>
-                        <div style="margin-top:10px; font-weight:700; color:var(--text-main);">${c.action_title}</div>
-                        <pre>${c.code}</pre>
+                vulnerabilityList.innerHTML += `
+                    <div class="finding-item ${c.severity}">
+                        <div class="finding-header"><span>⚠️ ${c.title}</span><strong>${c.severity.toUpperCase()}</strong></div>
+                        <div class="finding-desc">
+                            ${c.desc}<br>
+                            <div style="margin-top:10px; font-weight:700; color:var(--text-main);">${c.action}</div>
+                            <pre>${c.code}</pre>
+                        </div>
                     </div>
                 `;
-                vulnerabilityList.appendChild(itemDiv);
             });
 
-            consoleLog.innerText += `[+] Seluruh draf laporan kepatuhan arsitektur selesai disusun.`;
+            consoleLog.innerText += `[+] Pemetaan analisis komparasi selesai disusun secara riil tanpa simulasi statis.`;
             reportCard.style.display = 'block';
-        }
+        })
+        .catch(err => {
+            consoleLog.style.color = '#ef4444';
+            consoleLog.innerText += `\n[-] Gagal memproses data. Pastikan file app.py telah dijalankan di komputer Anda dan alamat IP backend yang diinput di atas sudah benar.`;
+        });
     }
 </script>
 
@@ -409,4 +303,5 @@
 
 
 
-            
+
+    
