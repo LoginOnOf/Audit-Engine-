@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v8.2</title>
+    <title>Enterprise Security Audit Engine v8.3</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -11,7 +11,6 @@
             --accent: #06b6d4;
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
-            --success: #10b981;
         }
 
         body {
@@ -52,17 +51,6 @@
             margin-bottom: 15px;
         }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #374151;
-            background-color: #1f2937;
-            color: white;
-            font-size: 0.95rem;
-            box-sizing: border-box;
-        }
-
         .btn-scan {
             display: block;
             width: 100%;
@@ -96,7 +84,13 @@
         }
 
         li {
-            margin-bottom: 4px;
+            margin-bottom: 8px;
+        }
+
+        a.link-test {
+            color: #22c55e;
+            font-weight: bold;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -104,51 +98,35 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v8.2</h1>
-        <p>Bypass Proteksi Sandbox Seluler — Versi Perbaikan Tautan</p>
+        <h1>Instant Audit Engine v8.3</h1>
+        <p>Bypass Sandbox Seluler — Akses Tautan Langsung Resmi</p>
     </header>
 
     <div class="card">
-        <div class="form-group">
-            <label style="display:block; font-size:0.8rem; margin-bottom:4px; color:var(--text-muted)">Domain Target Audit (Masukkan domain saja, contoh: google.com)</label>
-            <input type="text" id="targetUrl" value="google.com" placeholder="situs-target.com">
+        <div class="info-box" style="margin-top: 0; margin-bottom: 15px;">
+            <strong>ℹ️ PENGUMUMAN PENTING:</strong>
+            <p style="margin:5px 0 0 0;">Untuk menghindari kesalahan penulisan kode di browser handphone, salin domain target Anda (tanpa https) lalu klik salah satu tombol audit mandiri di bawah ini:</p>
         </div>
-        
-        <!-- Tombol pengalihan tautan langsung -->
-        <a id="scanButton" href="#" target="_blank" class="btn-scan" onclick="generateAuditLink()">Mulai Audit Nyata</a>
+
+        <!-- Tombol Audit Target Utama 1 (Google.com) -->
+        <a href="https://hackertarget.com" target="_blank" class="btn-scan">⚙️ Tes Audit Target: Google.com</a>
+
+        <!-- Tombol Audit Target Utama 2 (Situs Lab Testing IBM) -->
+        <a href="https://hackertarget.com" target="_blank" class="btn-scan" style="background-color: #eab308;">⚙️ Tes Audit Target: Testfire.net</a>
+
+        <!-- Tombol Audit Target Utama 3 (Yamaha Indonesia Resmi) -->
+        <a href="https://hackertarget.com" target="_blank" class="btn-scan" style="background-color: #ec4899;">⚙️ Tes Audit Target: Yamaha</a>
 
         <div class="info-box">
-            <strong>💡 Mengapa Metode Ini Pasti Berhasil?</strong>
-            <p style="margin:5px 0 0 0;">Karena keterbatasan browser HP memblokir skrip internal, alat ini mengalihkan rute Anda ke Server Komputasi Keamanan Siber Global secara langsung. Anda akan mendapatkan data berupa:</p>
+            <strong>📋 Data yang Akan Keluar di Layar HP Anda:</strong>
             <ul>
-                <li>Daftar lengkap konfigurasi HTTP Header Target</li>
-                <li>Status validasi enkripsi pertahanan SSL/TLS</li>
-                <li>Deteksi dini parameter proteksi yang kurang/hilang</li>
+                <li><strong>Server:</strong> Informasi sistem OS yang dipakai target.</li>
+                <li><strong>Strict-Transport-Security:</strong> Status enkripsi paksaan HTTPS.</li>
+                <li><strong>Content-Security-Policy:</strong> Proteksi suntikan kode luar (XSS).</li>
             </ul>
         </div>
     </div>
 </div>
-
-<script>
-    function generateAuditLink() {
-        const targetInput = document.getElementById('targetUrl').value.trim();
-        const scanButton = document.getElementById('scanButton');
-
-        if (!targetInput) {
-            alert('Wajib mengisi domain target!');
-            return false;
-        }
-
-        // Membersihkan karakter url dari input user
-        let cleanDomain = targetInput.replace('https://', '').replace('http://', '').replace(/\/$/, "");
-
-        // PERBAIKAN: Menggabungkan teks string menggunakan tanda tambah (+) agar variabel cleanDomain terbaca dengan benar
-        const finalAuditUrl = "https://hackertarget.com" + cleanDomain;
-        
-        // Memasukkan URL yang sudah benar ke atribut href tombol
-        scanButton.href = finalAuditUrl;
-    }
-</script>
 
 </body>
 </html>
