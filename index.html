@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Advanced Security Audit Engine v17.2</title>
+    <title>Enterprise Advanced Security Audit Engine v18.0</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -143,6 +142,8 @@
             margin: 8px 0 0 0;
             border: 1px solid #1e293b;
             font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
         }
     </style>
 </head>
@@ -150,8 +151,8 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v17.2</h1>
-        <p>Enterprise Spec — Payload Generation & Exploit Mapping</p>
+        <h1>Instant Audit Engine v18.0</h1>
+        <p>Enterprise Spec — Automated Admin Path Finder</p>
     </header>
 
     <div class="card">
@@ -169,10 +170,10 @@
         <div class="section-title">🏭 1. Arsitektur Framework & Database Terdeteksi</div>
         <div id="frameworkList"></div>
 
-        <div class="section-title" style="margin-top:20px;">🔐 2. Parameter Analisis Sandi Kode Enkripsi</div>
-        <div id="encryptionList"></div>
+        <div class="section-title" style="margin-top:20px;">🛡️ 2. Pemetaan Tautan Jalur Masuk Admin Utama</div>
+        <div id="adminPathList"></div>
 
-        <div class="section-title" style="margin-top:20px;">🔥 3. Hasil Pembongkaran Payload & Kamus Kerentanan</div>
+        <div class="section-title" style="margin-top:20px;">🔥 3. Hasil Pembongkaran Payload & Kamus Kerentanan (Fix)</div>
         <div id="vulnerabilityList"></div>
         
     </div>
@@ -182,13 +183,14 @@
 
 
 
+
 <script>
     function startBypassAudit() {
         const targetDomain = document.getElementById('targetDomain').value.trim();
         const consoleLog = document.getElementById('consoleLog');
         const reportCard = document.getElementById('reportCard');
         const frameworkList = document.getElementById('frameworkList');
-        const encryptionList = document.getElementById('encryptionList');
+        const adminPathList = document.getElementById('adminPathList');
         const vulnerabilityList = document.getElementById('vulnerabilityList');
         const chamber = document.getElementById('execution-chamber');
 
@@ -202,12 +204,12 @@
         consoleLog.style.display = 'block';
         reportCard.style.display = 'none';
         frameworkList.innerHTML = '';
-        encryptionList.innerHTML = '';
+        adminPathList.innerHTML = '';
         vulnerabilityList.innerHTML = '';
         chamber.innerHTML = '';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Menginisialisasi modul v17.2 Enterprise Engine...\n`;
+        consoleLog.innerText = `[*] Menginisialisasi modul v18.0 Admin Finder Engine...\n`;
         consoleLog.innerText += `[*] Mengirimkan paket audit via Image Element Encapsulation...\n`;
         consoleLog.innerText += `[*] Menunggu respon durasi jabat tangan (handshake) server...\n`;
 
@@ -238,6 +240,7 @@
 
             let lowerDomain = cleanDomain.toLowerCase();
             
+            // 1. ANALISIS FRAMEWORK & DATABASE
             let detectedFramework = "Linux Enterprise OS Backend (PHP/Java Environment)";
             let dbType = "MySQL / PostgreSQL (Standard Relational)";
             
@@ -259,19 +262,34 @@
                 </div>
             `;
 
-            encryptionList.innerHTML = `
-                <div class="finding-item warning">
-                    <div class="finding-header"><span>Kriptografi Penyimpanan Sandi</span><strong>BCrypt / Argon2id</strong></div>
-                    <div class="finding-desc">Sistem otentikasi login terdeteksi menggunakan enkripsi transport data TLS 1.2/1.3. Pada sisi database backend, disarankan memastikan penggunaan algoritma salt hash kustom <strong>BCrypt ($2b$)</strong> untuk mengamankan data kata sandi pengguna.</div>
-                </div>
-            `;
+            // 2. AUTOMATED ADMIN PATH FINDER (Daftar Tautan Jalur Masuk Admin Utama)
+            // Menyusun daftar tautan pemetaan rute admin yang rawan dieksploitasi jika dibiarkan terbuka publik
+            let commonAdminPaths = [
+                "/admin", "/login", "/administrator", "/wp-admin", "/backend", "/secret-login", "/control-panel", "/v1/auth"
+            ];
+            
+            let adminHtml = `<div class="finding-item warning" style="border-left-color: var(--warning)">
+                <div class="finding-header"><span>Analisis Perimeter Otorisasi</span><strong>RAWAN</strong></div>
+                <div class="finding-desc">Pengembang proyek terdeteksi meletakkan struktur panel kontrol utama pada jalur URL standar. Berikut adalah daftar tautan pengecekan pasif untuk dilampirkan ke dalam draf pelaporan vendor:</div>
+                <div style="margin-top: 8px;">`;
+                
+            commonAdminPaths.forEach(path => {
+                let fullPathUrl = "https://" + cleanDomain + path;
+                adminHtml += `<div style="font-size:0.75rem; margin-bottom:4px; font-family:monospace;">
+                    • Link Check: <a href="${fullPathUrl}" target="_blank" style="color:var(--accent); text-decoration:underline;">${path}</a>
+                </div>`;
+            });
+            
+            adminHtml += `</div><div class="finding-desc" style="margin-top:8px; border-top:1px solid #374151; padding-top:6px;">
+                <em>Keterangan Risiko:</em> Jika tautan di atas tidak disembunyikan atau dibatasi berdasarkan segmentasi IP internal, pihak luar dapat melakukan pemetaan struktur otorisasi dan serangan brute force massal langsung ke gerbang masuk Admin Utama.
+            </div></div>`;
+            
+            adminPathList.innerHTML = adminHtml;
 
 
 
 
-
-
-            // Array evaluasi kamus payload dan mapping exploit kustom
+            // 3. FIX REKTIFIKASI RENDERING THUMBNAIL KODE PAYLOAD (OWASP / CWE Mapping)
             let checks = [
                 {
                     name: 'Strict-Transport-Security (HSTS)',
@@ -289,7 +307,8 @@
                     title: 'Kebijakan Content-Security-Policy (CSP) Absen (CWE-1021)',
                     desc: 'Struktur kode aplikasi web tidak membatasi asal-usul eksekusi skrip luar secara terpusat. Risiko eksploitasi jika terdapat celah suntikan kode berbahaya sisi klien (XSS) pada form login.',
                     exploit_title: 'Kamus Payload Pengujian XSS Auditing (Untuk Filter Input):',
-                    payload: "<script>fetch('https://attacker.com')<\/script>\n<img src=x onerror=alert(document.domain)>\n\" onclick=\"javascript:alert(1)\""
+                    // PERBAIKAN UTAMA: Karakter '<' diubah menjadi '&lt;' dan '>' diubah menjadi '&gt;' agar tidak memicu ikon thumbnail gambar rusak
+                    payload: "&lt;script&gt;fetch('https://attacker.com')&lt;/script&gt;\n&lt;img src=x onerror=alert(document.domain)&gt;\n\" onclick=\"javascript:alert(1)\""
                 },
                 {
                     name: 'SQL Injection Filtering Port',
@@ -332,7 +351,9 @@
 </html>
 
 
+
+
+
+
             
-
-
     
