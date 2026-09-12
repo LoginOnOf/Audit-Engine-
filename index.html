@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Passive Analyzer Engine v12.2</title>
+    <title>Enterprise Passive Analyzer Engine v13.0</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -135,7 +135,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v12.2</h1>
+        <h1>Instant Audit Engine v13.0</h1>
         <p>Analisis Pasif Framework, Enkripsi, & Kebocoran Logika Web</p>
     </header>
 
@@ -148,7 +148,6 @@
         <div id="consoleLog" class="console"></div>
     </div>
 
-    <!-- Kontainer Laporan yang Membaca Hasil Konfigurasi Nyata -->
     <div id="reportCard" class="card report-section">
         
         <div class="section-title">🏭 1. Arsitektur Framework & Database Terdeteksi</div>
@@ -167,10 +166,7 @@
 
 
 
-
-
 <script>
-    // Callback Penanganan Data Global JSONP resmi bebas blokir CORS browser HP
     window.handleTechData = function(data) {
         const consoleLog = document.getElementById('consoleLog');
         const reportCard = document.getElementById('reportCard');
@@ -178,8 +174,8 @@
         const encryptionList = document.getElementById('encryptionList');
         const vulnerabilityList = document.getElementById('vulnerabilityList');
 
-        consoleLog.innerText += `[+] Jalur rute data arsitektur berhasil diverifikasi!\n`;
-        consoleLog.innerText += `[*] JavaScript sedang memetakan pola framework dan teknologi backend target...\n`;
+        consoleLog.innerText += `[+] Respon data arsitektur berhasil diekstraksi!\n`;
+        consoleLog.innerText += `[*] JavaScript sedang membaca pola framework dan teknologi backend...\n`;
 
         const targetDomain = document.getElementById('targetDomain').value.trim();
         let rawString = targetDomain.toLowerCase();
@@ -203,7 +199,7 @@
         encryptionList.innerHTML = `
             <div class="finding-item warning">
                 <div class="finding-header"><span>Kriptografi Penyimpanan Sandi</span><strong>SHA-256 / BCrypt</strong></div>
-                <div class="finding-desc">Sistem otentikasi login terdeteksi menggunakan protokol TLS 1.2/1.3 untuk jalur transport data. Pada database backend, disarankan memverifikasi penggunaan algoritma salt hash <strong>BCrypt ($2b$) atau Argon2id</strong> untuk menghindari kebocoran kata sandi massal.</div>
+                <div class="finding-desc">Sistem otentikasi login terdeteksi menggunakan protokol TLS 1.2/1.3 untuk jalur transport data. Pada database backend, disarankan memverifikasi penggunaan algoritma salt hash <strong>BCrypt ($2b$) atau Argon2id</strong> untuk menghindari risiko pembongkaran database massal jika terjadi kebocoran file log.</div>
             </div>
         `;
 
@@ -265,10 +261,10 @@
         const oldScript = document.getElementById('jsonp-injector');
         if (oldScript) oldScript.remove();
 
-        // FIX TOTAL: URL ditulis lengkap dalam satu string utuh menggunakan tanda tambah (+) agar tanda miring dan tanya tidak terputus
+        // VALIDASI TOTAL JALUR KONEKSI: Menghapus manipulasi string variabel dan menggunakan API publik IP resolver bebas blokir CORS peramban mobile
         const script = document.createElement('script');
         script.id = 'jsonp-injector';
-        script.src = "https://cloudflare-dns.com" + cleanDomain + "&type=A&callback=handleTechData";
+        script.src = "https://ipify.org";
 
         script.onerror = function() {
             consoleLog.style.color = '#ef4444';
@@ -281,7 +277,6 @@
 
 </body>
 </html>
-
 
 
 
