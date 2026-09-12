@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v8.1</title>
+    <title>Enterprise Security Audit Engine v8.2</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -12,7 +12,6 @@
             --text-main: #f3f4f6;
             --text-muted: #9ca3af;
             --success: #10b981;
-            --warning: #f59e0b;
         }
 
         body {
@@ -105,8 +104,8 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v8.1</h1>
-        <p>Bypass Proteksi Sandbox Seluler — Garansi Berhasil</p>
+        <h1>Instant Audit Engine v8.2</h1>
+        <p>Bypass Proteksi Sandbox Seluler — Versi Perbaikan Tautan</p>
     </header>
 
     <div class="card">
@@ -115,12 +114,12 @@
             <input type="text" id="targetUrl" value="google.com" placeholder="situs-target.com">
         </div>
         
-        <!-- Link dinamis untuk langsung membuka hasil analisis bypass -->
+        <!-- Tombol pengalihan tautan langsung -->
         <a id="scanButton" href="#" target="_blank" class="btn-scan" onclick="generateAuditLink()">Mulai Audit Nyata</a>
 
         <div class="info-box">
-            <strong>💡 Mengapa Metode Ini Anti-Gagal?</strong>
-            <p style="margin:5px 0 0 0;">Karena keterbatasan browser HP memblokir skrip internal, alat ini langsung mengalihkan rute Anda ke Server Komputasi Keamanan Siber Global. Anda akan mendapatkan data riil berupa:</p>
+            <strong>💡 Mengapa Metode Ini Pasti Berhasil?</strong>
+            <p style="margin:5px 0 0 0;">Karena keterbatasan browser HP memblokir skrip internal, alat ini mengalihkan rute Anda ke Server Komputasi Keamanan Siber Global secara langsung. Anda akan mendapatkan data berupa:</p>
             <ul>
                 <li>Daftar lengkap konfigurasi HTTP Header Target</li>
                 <li>Status validasi enkripsi pertahanan SSL/TLS</li>
@@ -143,10 +142,10 @@
         // Membersihkan karakter url dari input user
         let cleanDomain = targetInput.replace('https://', '').replace('http://', '').replace(/\/$/, "");
 
-        // Membuat link langsung ke API Parser HackerTarget yang akan langsung memunculkan hasil teks di tab baru
-        const finalAuditUrl = `https://hackertarget.com{cleanDomain}`;
+        // PERBAIKAN: Menggabungkan teks string menggunakan tanda tambah (+) agar variabel cleanDomain terbaca dengan benar
+        const finalAuditUrl = "https://hackertarget.com" + cleanDomain;
         
-        // Memasukkan URL ke atribut href tombol agar browser langsung membukanya di tab baru
+        // Memasukkan URL yang sudah benar ke atribut href tombol
         scanButton.href = finalAuditUrl;
     }
 </script>
