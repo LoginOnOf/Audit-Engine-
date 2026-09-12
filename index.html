@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+no<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -164,8 +164,6 @@
 </div>
 
 <div id="script-chamber"></div>
-
-
 <script>
     // Callback Penanganan Data Global JSONP anti-blokir browser HP
     window.handleTechData = function(data) {
@@ -265,10 +263,10 @@
         const oldScript = document.getElementById('jsonp-injector');
         if (oldScript) oldScript.remove();
 
-        // PENYEMPURNAAN AKURASI URL: Ditulis secara teks langsung agar tanda miring dan tanda tanya tidak terputus di browser mobile
+        // FIX FIX NYATA: Teks URL ditulis utuh menggunakan tanda petik miring (backtick) agar tidak terjadi kesalahan sambung kata oleh peramban HP
         const script = document.createElement('script');
         script.id = 'jsonp-injector';
-        script.src = "https://cloudflare-dns.com" + cleanDomain + "&type=A&callback=handleTechData";
+        script.src = `https://cloudflare-dns.com{cleanDomain}&type=A&callback=handleTechData`;
 
         script.onerror = function() {
             consoleLog.style.color = '#ef4444';
@@ -282,6 +280,3 @@
 </body>
 </html>
 
-
-
-    
