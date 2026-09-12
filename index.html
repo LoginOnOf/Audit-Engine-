@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Vulnerability Web Scanner</title>
+    <style>
+        :root {
+            --bg-dark: #090d16;
+            --card-bg: #111827;
+            --accent: #06b6d4;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #374151;
+            background-color: #1f2937;
+            color: white;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--accent);
+            color: #090d16;
+            font-weight: bold;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        .console {
+            display: none;
+            background-color: #000;
+            color: #22c55e;
+            font-family: monospace;
+            font-size: 0.75rem;
+            padding: 10px;
+            border-radius: 6px;
+            white-space: pre-line;
+            margin-top: 10px;
+            border: 1px solid #1e293b;
+        }
+
+        .report-section {
+            display: none;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: bold;
+            border-bottom: 1px solid #374151;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+
+        .finding-item {
+            padding: 10px;
+            border-radius: 6px;
+            background-color: #1f2937;
+            margin-bottom: 10px;
+            border-left: 4px solid #fff;
+        }
+
+        .finding-item.danger { border-color: var(--danger); }
+        .finding-item.warning { border-color: var(--warning); }
+        .finding-item.success { border-color: var(--success); }
+
+        .finding-header {
+            font-size: 0.85rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .finding-desc {
+            font-size: 0.75rem;
+            color: #d1d5db;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Mobile Audit Engine Nyata</h1>
+        <p>Analisis Header Pertahanan HTTP secara Langsung</p>
+    </header>
+
+    <div class="card">
+        <div class="form-group">
+            <label for="targetUrl">URL Target Website (Gunakan http:// atau https://)</label>
+            <input type="url" id="targetUrl" value="https://example.com" placeholder="https://situs-target.com">
+        </div>
+        <button onclick="executeLiveScan()">Jalankan Pemindaian Nyata</button>
+        <div id="consoleLog" class="console"></div>
+    </div>
+
+    <div id="reportCard" class="card report-section">
+        <div class="section-title">📊 Komponen & Celah Hasil Pemindaian Nyata</div>
+        <div id="findingsList"></div>
+    </div>
+</div>
+
+<script>
+    async function executeLiveScan() {
+        const targetUrl = document.getElementById('targetUrl').value.trim();
+        const consoleLog = document.getElementById('consoleLog');
+        const reportCard = document.getElementById('reportCard');
+        const findingsList = document.getElementById('findingsList');
+
+        if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+            alert('Format URL salah! Wajib menyertakan http:// atau https://');
+            return;
+        }
+
+        consoleLog.style.display = 'block';
+        reportCard.style.display = 'none';
+        findingsList.innerHTML = '';
+        consoleLog.innerText = `[*] Menginisialisasi koneksi soket peramban mobile...\n`;
+
+        // Menggunakan CORS Proxy publik gratis untuk menjangkau target secara riil dari handphone
+        const proxyUrl = "https://herokuapp.com"; 
+        const cleanTarget = targetUrl.replace(/\/$/, ""); // Bersihkan slash akhir
+        
+        consoleLog.innerText += `[*] Mengirimkan request HTTP HEAD nyata ke target via CORS Proxy...\n`;
+
+        try {
+            // Melakukan request jaringan nyata ke situs target
+            const response = await fetch(proxyUrl + cleanTarget, {
+                method: 'HEAD',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            consoleLog.innerText += `[+] Respon diterima! Status Kode: ${response.status} ${response.statusText}\n`;
+            consoleLog.innerText += `[*] Menganalisis parameter arsitektur pertahanan server...\n`;
+
+            // Mengambil semua header asli dari website target
+            const headers = response.headers;
+            let checks = [
+                {
+                    name: 'Strict-Transport-Security',
+                    exist: headers.has('strict-transport-security'),
+                    severity: 'danger',
+                    desc: 'Header HSTS absen. Website tidak memaksa enkripsi SSL/TLS secara konsisten, rentan terhadap pembajakan jalur (MitM).'
+                },
+                {
+                    name: 'Content-Security-Policy',
+                    exist: headers.has('content-security-policy'),
+                    severity: 'warning',
+                    desc: 'Header CSP tidak dikonfigurasi. Browser tidak membatasi asal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
+                },
+                {
+                    name: 'X-Content-Type-Options',
+                    exist: headers.has('x-content-type-options'),
+                    severity: 'warning',
+                    desc: 'Header X-Content-Type-Options tidak ditemukan. Server membiarkan browser melakukan MIME-sniffing terhadap tipe file data.'
+                }
+            ];
+
+            // Menampilkan hasil analisis nyata ke layar dasbor
+            checks.forEach(item => {
+                const element = document.createElement('div');
+                element.className = `finding-item ${item.exist ? 'success' : item.severity}`;
+                
+                if (item.exist) {
+                    element.innerHTML = `
+                        <div class="finding-header">
+                            <span>✓ ${item.name}</span>
+                            <span style="color:var(--success)">AKTIF</span>
+                        </div>
+                        <div class="finding-desc">Komponen pertahanan ini terpasang dengan baik pada server target.</div>
+                    `;
+                } else {
+                    element.innerHTML = `
+                        <div class="finding-header">
+                            <span>⚠️ ${item.name} (CWE-523)</span>
+                            <span style="color:${item.severity === 'danger' ? 'var(--danger)' : 'var(--warning)'}">${item.severity.toUpperCase()}</span>
+                        </div>
+                        <div class="finding-desc">${item.desc}</div>
+                    `;
+                }
+                findingsList.appendChild(element);
+            });
+
+            consoleLog.innerText += `[+] Pelaporan kepatuhan arsitektur web selesai disusun.`;
+            reportCard.style.display = 'block';
+
+        } catch (error) {
+            consoleLog.style.color = '#ef4444';
+            consoleLog.innerText += `\n[-] Gagal melakukan pemindaian nyata.\nDetail Kendala: Kunci CORS Proxy eksternal aktif atau server target memblokir permintaan proxy otomatis. Untuk jaringan VPN internal kantor, audit wajib menggunakan backend Python khusus agar tidak terhalang restriksi Sandbox browser handphone.`;
+        }
+    }
+</script>
+
+</body>
+</html>
