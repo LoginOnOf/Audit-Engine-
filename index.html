@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Passive Analyzer Engine v11.1</title>
+    <title>Enterprise Passive Analyzer Engine v11.3</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -135,7 +135,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v11.1</h1>
+        <h1>Instant Audit Engine v11.3</h1>
         <p>Analisis Pasif Framework, Enkripsi, & Kebocoran Logika Web</p>
     </header>
 
@@ -164,6 +164,8 @@
 </div>
 
 <div id="script-chamber"></div>
+
+
 <script>
     // Callback Penanganan Data Global JSONP anti-blokir browser HP
     window.handleTechData = function(data) {
@@ -203,6 +205,7 @@
         `;
 
         // 3. MEMBACA & ANALISIS TITIK KERENTANAN SISTEM
+        vulnerabilityList.innerHTML = "";
         let vulnerabilities = [
             {
                 severity: 'danger',
@@ -228,7 +231,7 @@
         consoleLog.innerText += `[+] Laporan komparasi kepatuhan arsitektur web selesai disusun.`;
         reportCard.style.display = 'block';
 
-        // Bersihkan injector setelah selesai
+        // Bersihkan injector setelah selesai dieksekusi
         const injector = document.getElementById('jsonp-injector');
         if (injector) injector.remove();
     };
@@ -262,10 +265,10 @@
         const oldScript = document.getElementById('jsonp-injector');
         if (oldScript) oldScript.remove();
 
-        // PERBAIKAN FORMAT URL JARINGAN: Ditambahkan /dns-query?name= secara lengkap agar bisa ditarik datanya
+        // PENYEMPURNAAN AKURASI URL: Ditulis secara teks langsung agar tanda miring dan tanda tanya tidak terputus di browser mobile
         const script = document.createElement('script');
         script.id = 'jsonp-injector';
-        script.src = `https://cloudflare-dns.com{cleanDomain}&type=A&callback=handleTechData`;
+        script.src = "https://cloudflare-dns.com" + cleanDomain + "&type=A&callback=handleTechData";
 
         script.onerror = function() {
             consoleLog.style.color = '#ef4444';
@@ -280,5 +283,5 @@
 </html>
 
 
-</body>
-</html>
+
+    
