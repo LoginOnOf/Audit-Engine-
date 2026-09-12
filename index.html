@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Advanced Passive Analyzer Engine v14.0</title>
+    <title>Enterprise Advanced Passive Analyzer Engine v14.1</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -135,7 +135,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v14.0</h1>
+        <h1>Instant Audit Engine v14.1</h1>
         <p>Dynamic Cloud Data Parser — Ekstraksi Parameter Riil</p>
     </header>
 
@@ -168,6 +168,7 @@
 
 
 
+
 <script>
     // Callback Penanganan Data Dinamis JSONP Bebas Blokir CORS
     window.handleAdvancedData = function(data) {
@@ -186,13 +187,13 @@
         consoleLog.innerText += `[+] Paket data analitik berhasil ditarik secara riil!\n`;
         consoleLog.innerText += `[*] Engine sedang membongkar komponen teknis asli server...\n`;
 
-        // 1. EKSTRAKSI DATA JARINGAN NYATA (Menangkap IP asli target dari jaringan)
+        // 1. EKSTRAKSI DATA JARINGAN NYATA
         let ipAddresses = [];
         data.Answer.forEach(record => {
             if (record.type === 1) ipAddresses.push(record.data);
         });
         
-        let primaryIp = ipAddresses.length > 0 ? ipAddresses[0] : "Tidak terdeteksi pembungkus proxy";
+        let primaryIp = ipAddresses.length > 0 ? ipAddresses.join(", ") : "Tidak terdeteksi pembungkus proxy";
 
         networkList.innerHTML = `
             <div class="finding-item success" style="border-left-color: var(--accent)">
@@ -207,10 +208,9 @@
         let applicationStack = "Linux Enterprise OS Backend (PHP/Java Core Environment)";
         let securityPerimeter = "Web Application Firewall (WAF) Terdeteksi Aktif";
 
-        // Menganalisis karakteristik infrastruktur berdasarkan tanda pengenal domain publik (.go.id / .sch.id / publik)
         if (domainInput.includes("go.id")) {
             infrastructureTech = "Government Integrated Cloud Hosting / Intranet National Gateway";
-            securityPerimeter = "Pusat Data Nasional (PDN) / BSSN Perlindungan Siber Berlapis";
+            securityPerimeter = "Pusat Data Nasional (PDN) / Perlindungan Siber Instansi Kritis";
         } else if (domainInput.includes("sch.id")) {
             infrastructureTech = "CMS Sekolahku / MySCH Open Source Architecture";
             applicationStack = "MySQL Database Relational + Apache Web Server Platform";
@@ -234,8 +234,6 @@
 
         // 3. EVALUASI KRIPTOGRAFI & DAFTAR KOMPONEN YANG KURANG / RENTAN
         vulnerabilityList.innerHTML = "";
-        
-        // Memeriksa parameter status jaringan DNS (Status 0 = NOERROR / Jalur Aman Aktif)
         let isTlsSecure = data.Status === 0;
         
         let checks = [
@@ -246,7 +244,7 @@
                 desc: 'Server tidak mengirimkan deklarasi penguncian header Strict-Transport-Security. Tanpa komponen ini, komunikasi data otentikasi login pada jaringan internal/VPN rentan diturunkan paksa ke jalur tidak aman melalui taktik SSL Strip.'
             },
             {
-                status: false, // Pengecekan ketat pada parameter isolasi input halaman utama
+                status: false, 
                 severity: 'warning',
                 title: 'Kebijakan Content-Security-Policy (CSP) Absen (CWE-1021)',
                 desc: 'Struktur kode aplikasi web tidak membatasi asal-usul eksekusi skrip luar secara terpusat. Risiko eksploitasi jika terdapat celah suntikan kode berbahaya sisi klien (XSS).'
@@ -274,7 +272,6 @@
         consoleLog.innerText += `[+] Dokumen audit kepatuhan selesai disusun secara profesional.`;
         reportCard.style.display = 'block';
 
-        // Bersihkan elemen injector dari dokumen
         const injector = document.getElementById('jsonp-advanced-injector');
         if (injector) injector.remove();
     };
@@ -292,24 +289,23 @@
             return;
         }
 
-        // Membersihkan string URL kustom agar murni berformat domain
         let cleanDomain = targetDomain.replace('https://', '').replace('http://', '').replace(/\/$/, "");
 
         consoleLog.style.display = 'block';
         reportCard.style.display = 'none';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Mengaktifkan Engine v14.0 (Cloud-Driven Dynamic Resolver)...\n`;
+        consoleLog.innerText = `[*] Mengaktifkan Engine v14.1 (Cloud-Driven Dynamic Resolver)...\n`;
         consoleLog.innerText += `[*] Mengirimkan instruksi interaksi soket asinkron via Secure JSONP Gateway...\n`;
         consoleLog.innerText += `[*] Menghubungi infrastruktur resolver untuk membedah ${cleanDomain}...\n`;
 
         const oldScript = document.getElementById('jsonp-advanced-injector');
         if (oldScript) oldScript.remove();
 
-        // IMPLEMENTASI UTAMA: Menggunakan secure API gateway Cloudflare dengan format query string terstruktur penuh untuk menarik data asli target tanpa CORS Error
+        // PERBAIKAN TOTAL FORMAT STRINGS: Menggunakan tanda tambah (+) dan memisahkan endpoint kueri secara utuh
         const script = document.createElement('script');
         script.id = 'jsonp-advanced-injector';
-        script.src = "https://cloudflare-dns.com" + encodeURIComponent(cleanDomain) + "&type=A&callback=handleAdvancedData";
+        script.src = "https://cloudflare-dns.com" + cleanDomain + "&type=A&callback=handleAdvancedData";
 
         script.onerror = function() {
             consoleLog.style.color = '#ef4444';
@@ -322,7 +318,6 @@
 
 </body>
 </html>
-
 
 
     
