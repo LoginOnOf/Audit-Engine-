@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v7.0</title>
+    <title>Enterprise Security Audit Engine v7.1</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -144,14 +144,15 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v7.0</h1>
-        <p>Pemindaian Konfigurasi Keamanan Web Tanpa Setup</p>
+        <h1>Instant Audit Engine v7.1</h1>
+        <p>Pemindaian Konfigurasi Keamanan Web Berbasis Seluler</p>
     </header>
 
     <div class="card">
         <div class="form-group">
-            <label for="targetUrl">URL Target Website Audit</label>
-            <input type="url" id="targetUrl" value="http://testfire.net" placeholder="https://situs-target.com">
+            <label for="targetUrl">URL Target Website Audit (Wajib Menggunakan https://)</label>
+            <!-- Diubah ke HTTPS secara default untuk mencegah restriksi Mixed Content peramban handphone -->
+            <input type="url" id="targetUrl" value="https://testfire.net" placeholder="https://situs-target.com">
         </div>
         <button onclick="executeInstantScan()">Mulai Audit Nyata</button>
         <div id="consoleLog" class="console"></div>
@@ -180,14 +181,24 @@
         findingsList.innerHTML = '';
         consoleLog.innerText = `[*] Mengaktifkan soket jaringan peramban mobile...\n`;
 
-        // Menggunakan gateway parser publik yang langsung mengambil data respons teks terenkripsi
-        const cleanTarget = encodeURIComponent(targetUrl.replace(/\/$/, ""));
+        // Mengubah target secara otomatis ke https jika user salah memasukkan format http biasa
+        let safeTarget = targetUrl;
+        if (safeTarget.startsWith('http://')) {
+            safeTarget = safeTarget.replace('http://', 'https://');
+        }
+
+        // PERBAIKAN UTAMA: Format pemanggilan API Jembatan AllOrigins yang valid dengan parameter ?url=
+        const cleanTarget = encodeURIComponent(safeTarget.replace(/\/$/, ""));
         const integratedEngine = `https://allorigins.win{cleanTarget}`; 
         
         consoleLog.innerText += `[*] Mengirimkan paket analitik ke target via Integrated Gateway...\n`;
 
         try {
             const response = await fetch(integratedEngine);
+            if (!response.ok) {
+                throw new Error(`Gateway memberikan respon status: ${response.status}`);
+            }
+            
             const data = await response.json();
 
             if (!data || !data.contents) {
@@ -203,13 +214,13 @@
             let checks = [
                 {
                     name: 'Strict-Transport-Security (HSTS)',
-                    exist: pageContent.includes('strict-transport-security') || targetUrl.startsWith('https://'),
+                    exist: pageContent.includes('strict-transport-security'),
                     severity: 'danger',
-                    desc: 'Parameter HSTS absen di server. Komunikasi tidak dipaksa menggunakan jalur HTTPS aman, rentan terhadap pembajakan jalur komunikasi (MitM).'
+                    desc: 'Parameter HSTS absen di server. Komunikasi tidak dipaksa menggunakan jalur HTTPS aman secara konsisten, rentan terhadap pembajakan jalur komunikasi (MitM).'
                 },
                 {
                     name: 'Content-Security-Policy (CSP)',
-                    exist: pageContent.includes('content-security-policy') || pageContent.includes('<meta http-equiv="content-security-policy"'),
+                    exist: pageContent.includes('content-security-policy') || pageContent.includes('http-equiv="content-security-policy"'),
                     severity: 'warning',
                     desc: 'Kebijakan CSP tidak dikonfigurasi. Browser tidak membatasi asal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
                 },
@@ -251,7 +262,7 @@
 
         } catch (error) {
             consoleLog.style.color = '#ef4444';
-            consoleLog.innerText += `\n[-] Kegagalan audit jaringan.\nDetail: ${error.message}`;
+            consoleLog.innerText += `\n[-] Kegagalan audit jaringan.\nDetail: ${error.message}\nTip: Pastikan koneksi internet ponsel stabil dan situs target dapat diakses publik.`;
         }
     }
 </script>
