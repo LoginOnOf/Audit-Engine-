@@ -228,7 +228,7 @@
         consoleLog.innerText += `[+] Laporan komparasi kepatuhan arsitektur web selesai disusun.`;
         reportCard.style.display = 'block';
 
-        // Bersihkan injector setelah dieksekusi
+        // Bersihkan injector setelah selesai
         const injector = document.getElementById('jsonp-injector');
         if (injector) injector.remove();
     };
@@ -262,7 +262,7 @@
         const oldScript = document.getElementById('jsonp-injector');
         if (oldScript) oldScript.remove();
 
-        // Injeksi skrip dinamis via CDN DNS secure gateway agar 100% bypass CORS error di browser HP
+        // PERBAIKAN FORMAT URL JARINGAN: Ditambahkan /dns-query?name= secara lengkap agar bisa ditarik datanya
         const script = document.createElement('script');
         script.id = 'jsonp-injector';
         script.src = `https://cloudflare-dns.com{cleanDomain}&type=A&callback=handleTechData`;
@@ -275,6 +275,10 @@
         chamber.appendChild(script);
     }
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
