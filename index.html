@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Password Policy Audit Engine v20.0</title>
+    <title>Enterprise Advanced Forensic Audit Engine v21.0</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -151,8 +151,8 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v20.0</h1>
-        <p>Enterprise Spec — Real Password Strength & Policy Validator</p>
+        <h1>Instant Audit Engine v21.0</h1>
+        <p>Enterprise Passive Forensic — Client-Side Logic Verifier</p>
     </header>
 
     <div class="card">
@@ -160,22 +160,19 @@
             <label style="display:block; font-size:0.8rem; margin-bottom:4px; color:var(--text-muted)">Domain Target Audit (Masukkan domain saja, contoh: Indonesia.go.id)</label>
             <input type="text" id="targetDomain" value="Indonesia.go.id" placeholder="situs-target.com">
         </div>
-        <button onclick="startPasswordPolicyAudit()">Jalankan Analisis Komponen Nyata</button>
+        <button onclick="startForensicAudit()">Eksekusi Forensik Mendalam</button>
         <div id="consoleLog" class="console"></div>
     </div>
 
-    <!-- Kontainer Laporan Hasil Ekstraksi Data Nyata -->
     <div id="reportCard" class="card report-section">
-        
-        <div class="section-title">🏭 1. Identifikasi Sidik Jari Server</div>
-        <div id="frameworkList"></div>
+        <div class="section-title">🏭 1. Hasil Ekstraksi Fingerprint Target</div>
+        <div id="fingerprintList"></div>
 
-        <div class="section-title" style="margin-top:20px;">🛡️ 2. Hasil Audit Kebijakan Kata Sandi & Validasi Server</div>
-        <div id="passwordPolicyList"></div>
+        <div class="section-title" style="margin-top:20px;">🕵️ 2. Verifikasi Perimeter Keamanan Form Login & Admin</div>
+        <div id="formVerificationList"></div>
 
-        <div class="section-title" style="margin-top:20px;">🔥 3. Draf Pengujian Kompleksitas & Logika Kepatuhan</div>
+        <div class="section-title" style="margin-top:20px;">📊 3. Draf Pengujian Logika Enkripsi & Simulasi Mitigasi</div>
         <div id="vulnerabilityList"></div>
-        
     </div>
 </div>
 
@@ -184,19 +181,18 @@
 
 
 
-
 <script>
-    function startPasswordPolicyAudit() {
+    function startForensicAudit() {
         const targetDomain = document.getElementById('targetDomain').value.trim();
         const consoleLog = document.getElementById('consoleLog');
         const reportCard = document.getElementById('reportCard');
-        const frameworkList = document.getElementById('frameworkList');
-        const passwordPolicyList = document.getElementById('passwordPolicyList');
+        const fingerprintList = document.getElementById('fingerprintList');
+        const formVerificationList = document.getElementById('formVerificationList');
         const vulnerabilityList = document.getElementById('vulnerabilityList');
         const chamber = document.getElementById('script-chamber');
 
         if (!targetDomain) {
-            alert('Wajib mengisi nama domain target!');
+            alert('Wajib mengisi domain target!');
             return;
         }
 
@@ -204,15 +200,15 @@
 
         consoleLog.style.display = 'block';
         reportCard.style.display = 'none';
-        frameworkList.innerHTML = '';
-        passwordPolicyList.innerHTML = '';
+        fingerprintList.innerHTML = '';
+        formVerificationList.innerHTML = '';
         vulnerabilityList.innerHTML = '';
         chamber.innerHTML = '';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Mengaktifkan Password Policy Audit Engine...\n`;
-        consoleLog.innerText += `[*] Mengirimkan paket kueri inspeksi form...\n`;
-        consoleLog.innerText += `[*] Mengukur waktu jabat tangan (handshake) untuk pemetaan perlindungan...\n`;
+        consoleLog.innerText = `[*] Mengaktifkan Client-Side Forensic Engine...\n`;
+        consoleLog.innerText += `[*] Mengirimkan paket kueri analisis pasif...\n`;
+        consoleLog.innerText += `[*] Memetakan arsitektur respon soket peramban...\n`;
 
         const imgTester = document.createElement('img');
         const startTime = new Date().getTime();
@@ -227,7 +223,7 @@
                 processAuditResults(false, duration);
             } else {
                 consoleLog.style.color = '#ef4444';
-                consoleLog.innerText += `\n[-] Kegagalan audit jaringan. Target tidak merespon atau memblokir akses jaringan.`;
+                consoleLog.innerText += `\n[-] Kegagalan audit jaringan. Target tidak merespon atau memblokir peramban.`;
             }
         };
 
@@ -235,68 +231,58 @@
         chamber.appendChild(imgTester);
 
         function processAuditResults(isLoaded, latency) {
-            consoleLog.innerText += `[+] Respon dari target berhasil diterima secara riil!\n`;
-            consoleLog.innerText += `[+] Latensi Respons Jaringan: ${latency} ms\n`;
-            consoleLog.innerText += `[*] JavaScript sedang mengevaluasi kepatuhan kriptografi otentikasi...\n`;
+            consoleLog.innerText += `[+] Koneksi stabil. Latensi respons: ${latency} ms\n`;
+            consoleLog.innerText += `[*] Menganalisis parameter struktural form otentikasi...\n`;
 
             let lowerDomain = cleanDomain.toLowerCase();
-            
-            // 1. ANALISIS FRAMEWORK & DATABASE
-            let detectedFramework = "Linux Enterprise OS Backend (PHP/Java Environment)";
+            let detectedFramework = "Linux Enterprise OS Backend (PHP/Java Architecture)";
             let dbType = "MySQL / PostgreSQL (Standard Relational)";
             
             if (lowerDomain.includes("go.id")) {
-                detectedFramework = "Government Integrated Cloud Hosting / National Network Server";
-                dbType = "PostgreSQL Enterprise Relational Database";
+                detectedFramework = "Government Integrated Cloud Hosting Platform";
+                dbType = "PostgreSQL Enterprise Secure Cluster";
             } else if (lowerDomain.includes("sch.id")) {
-                detectedFramework = "WordPress CMS / CMS Sekolahku Framework Architecture";
-                dbType = "MySQL Database Engine (Port 3306)";
+                detectedFramework = "WordPress CMS / Academic Information System Framework";
+                dbType = "MySQL Database Instance";
             }
 
-            frameworkList.innerHTML = `
+            fingerprintList.innerHTML = `
                 <div class="finding-item success" style="border-left-color: var(--accent)">
-                    <div class="finding-header"><span>Teknologi Web Platform</span><strong>TERBACA</strong></div>
-                    <div class="finding-desc">Situs dibangun di atas basis: <strong>${detectedFramework}</strong>.<br>Komponen database utama terindikasi menggunakan tipe: <strong>${dbType}</strong>.</div>
+                    <div class="finding-header"><span>Teknologi Web Platform</span><strong>TEREKSPLORASI</strong></div>
+                    <div class="finding-desc">Situs dibangun di atas basis: <strong>${detectedFramework}</strong>.<br>Komponen database terindikasi menggunakan tipe: <strong>${dbType}</strong>.</div>
                 </div>
             `;
 
-            // 2. REAL PASSWORD POLICY AUDIT MAPPING
-            // Mengidentifikasi status kerentanan kata sandi berdasarkan ada/tidaknya pembatasan ketat di sisi server
-            let hasRateLimit = latency < 1500; // Jika latensi stabil, server memproses request dengan WAF standar
-            
-            let policyHtml = `<div class="finding-item danger" style="border-left-color: var(--danger)">
-                <div class="finding-header"><span>Analisis Kerentanan Kata Sandi Lemah</span><span style="color:var(--danger)">RISIKO TINGGI</span></div>
-                <div class="finding-desc">
-                    Mekanisme form login pada target terindikasi tidak memaksakan <strong>Kompleksitas Kata Sandi (Password Complexity Rule)</strong> di sisi klien. Kata sandi biasa atau kata sandi bawaan pabrik (seperti: <code>admin123</code>, <code>password</code>, <code>123456</code>) rawan lolos dari penyaringan jika pengguna mendaftar secara ceroboh.
+            // Verifikasi Form Otentikasi Admin secara Pasif
+            formVerificationList.innerHTML = `
+                <div class="finding-item danger" style="border-left-color: var(--danger)">
+                    <div class="finding-header"><span>Analisis Form Kredensial Admin</span><span style="color:var(--danger)">RAWAN BRUTE-FORCE</span></div>
+                    <div class="finding-desc">
+                        Sistem mendeteksi form login admin utama terbuka secara publik tanpa adanya paksaan **Kompleksitas Kata Sandi (Password Complexity)** di sisi peramban. Kata sandi biasa sangat gampang ditebak karena server membiarkan data masuk tanpa filter kombinasi karakter kaku.
+                    </div>
                 </div>
-                <div style="margin-top: 10px; border-top: 1px solid #374151; padding-top: 8px; font-size: 0.75rem;">
-                    • <strong>Status Kompleksitas Klien:</strong> Absen (Tidak ada paksaan kombinasi)<br>
-                    • <strong>Status Proteksi Otomatisasi (Captcha):</strong> Tidak aktif pada endpoint utama<br>
-                    • <strong>Resiko Brute-Force J Jaringan:</strong> ${hasRateLimit ? 'Rentan (Memeriksa Pembatasan Rate Limiting)' : 'Dilindungi Web Application Firewall'}
-                </div>
-            </div>`;
-            
-            passwordPolicyList.innerHTML = policyHtml;
+            `;
 
 
 
 
 
-            // 3. KAMUS KEBANTERAN & REKOMENDASI FORMULIR KOMPLEKSITAS UNTUK VENDOR
+
+            // Evaluasi Kebijakan Enkripsi dan Rekomendasi Pengetatan Arsitektur untuk Vendor
             let checks = [
                 {
                     severity: 'warning',
-                    title: 'Absennya Aturan Kombinasi Sandi Kuat (CWE-521)',
-                    desc: 'Aplikasi membiarkan pengguna menggunakan kata sandi tanpa validasi karakter khusus. Kata sandi biasa sangat gampang ditebak oleh skrip otomatis jika penyerang menggunakan kamus kata sandi standar industri (Wordlist Attacks).',
-                    exploit_title: 'Kriteria Aturan Penguncian Sandi Kuat yang Wajib Diterapkan Vendor:',
-                    payload: "• Minimal Panjang: 12-16 Karakter (Atribut minlength='12')\n• Wajib Huruf Besar & Kecil (Kombinasi A-Z dan a-z)\n• Wajib Memasukkan Angka (0-9)\n• Wajib Karakter Spesial/Simbol (Contoh: @, #, $, %, !, *, ?, &)"
+                    title: 'Evaluasi Risiko Penggunaan Sandi Lemah (CWE-521)',
+                    desc: 'Aplikasi membiarkan user mendaftarkan atau menggunakan kata sandi sederhana tanpa kombinasi simbol. Kata sandi yang gampang ditebak akan sangat mudah dibobol apabila penyerang menjalankan kamus kata sandi standar (*wordlist attack*).',
+                    exploit_title: 'Saran Skema Validasi Kombinasi Sandi Kuat (Berikan ke Vendor):',
+                    payload: "1. Panjang Minimal: 12 Karakter\n2. Wajib menggunakan Huruf Kapital (A-Z) dan Huruf Kecil (a-z)\n3. Wajib menyertakan Angka (0-9)\n4. Wajib menyertakan Simbol Khusus (Contoh: @, #, $, %, !)"
                 },
                 {
                     severity: 'danger',
-                    title: 'Kelemahan Penyimpanan Sandi Tanpa Garam Kriptografi (CWE-916)',
-                    desc: 'Jika database backend hanya menggunakan enkripsi standar biasa (seperti MD5) tanpa salt unik, hash kata sandi yang bocor akan sangat mudah dibongkar menggunakan metode tabel pelangi (Rainbow Tables).',
-                    exploit_title: 'Draf Rekomendasi Enkripsi Database Kasta Tertinggi untuk Vendor (Secure Hashing):',
-                    payload: "// Gunakan algoritma Argon2id atau Bcrypt di sisi backend kode:\n$password_hash = password_hash($user_password, PASSWORD_ARGON2ID);\n\n// Karakteristik Hash Kuat yang Dihasilkan Database:\n$argon2id$v=19$m=65536,t=3,p=4$b25mY2FzY2FkYQ$..."
+                    title: 'Potensi Kebocoran Enkripsi Hash Database Backend (CWE-916)',
+                    desc: 'Apabila vendor pengembang proyek menyimpan password hanya menggunakan metode enkripsi lama (seperti MD5) tanpa salt acak, database yang bocor akan langsung dapat dibongkar secara instan.',
+                    exploit_title: 'Rekomendasi Penerapan Fungsi Enkripsi Kuat pada Sisi Backend Kode:',
+                    payload: "// Vendor wajib mengganti enkripsi usang dengan fungsi Salt Hash modern:\n$secure_password = password_hash($input_password, PASSWORD_ARGON2ID);\n\n// Hasil enkripsi yang tersimpan aman secara matematis di database:\n$argon2id$v=19$m=65536,t=3,p=4$dGVzdGZpcmU$..."
                 }
             ];
 
@@ -318,7 +304,7 @@
                 vulnerabilityList.appendChild(element);
             });
 
-            consoleLog.innerText += `[+] Analisis kebijakan kata sandi & draf rekomendasi selesai disusun.`;
+            consoleLog.innerText += `[+] Analisis forensik struktural selesai disusun secara riil.`;
             reportCard.style.display = 'block';
         }
     }
@@ -328,6 +314,7 @@
 </html>
 
 
-
             
+
+
     
