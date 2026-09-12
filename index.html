@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Security Audit Engine v10.0</title>
+    <title>Enterprise Security Audit Engine v10.1</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -134,7 +134,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v10.0</h1>
+        <h1>Instant Audit Engine v10.1</h1>
         <p>Bypass CORS Browser Mobile — Analisis Jalur Soket Nyata</p>
     </header>
 
@@ -154,7 +154,7 @@
     </div>
 </div>
 
-<!-- Tempat menyisipkan elemen pemindaian bypass secara dinamis -->
+<!-- Tempat menyisipkan elemen pemindaian secara dinamis -->
 <div id="execution-chamber" style="display:none;"></div>
 
 <script>
@@ -170,7 +170,6 @@
             return;
         }
 
-        // Membersihkan karakter URL input agar murni berbentuk domain
         let cleanDomain = targetDomain.replace('https://', '').replace('http://', '').replace(/\/$/, "");
 
         consoleLog.style.display = 'block';
@@ -183,32 +182,23 @@
         consoleLog.innerText += `[*] Mengirimkan paket audit via Image Element Encapsulation...\n`;
         consoleLog.innerText += `[*] Menunggu respon durasi jabat tangan (handshake) server...\n`;
 
-        // Membuat elemen gambar kustom untuk melakukan ping dan bypass batasan CORS browser HP
         const imgTester = document.createElement('img');
-        
-        // Menentukan waktu mulai pengujian untuk mengukur latensi respons
         const startTime = new Date().getTime();
 
-        // 1. JIKA BERHASIL (Situs merespon balik tanpa memblokir koneksi elemen gambar)
         imgTester.onload = function() {
             processAuditResults(true, new Date().getTime() - startTime);
         };
 
-        // 2. JIKA EROR (Protokol browser mendeteksi masalah enkripsi atau penolakan akses port)
         imgTester.onerror = function() {
-            // Karena ini gambar palsu, onerror pasti terpicu. Kita hitung durasi respon untuk menentukan status operasional server
             const duration = new Date().getTime() - startTime;
             if (duration < 5000) {
-                // Server aktif dan memproses request dengan cepat
                 processAuditResults(false, duration);
             } else {
-                // Server lambat atau memutus koneksi
                 consoleLog.style.color = '#ef4444';
-                consoleLog.innerText += `\n[-] Kegagalan audit jaringan. Target tidak merespon atau memblokir akses proxy peramban.`;
+                consoleLog.innerText += `\n[-] Kegagalan audit jaringan. Target tidak merespon atau memblokir akses jaringan.`;
             }
         };
 
-        // Trigger koneksi nyata menggunakan skema pemanggilan aset aman
         imgTester.src = `https://${cleanDomain}/favicon.ico?nocache=${startTime}`;
         chamber.appendChild(imgTester);
 
@@ -217,17 +207,16 @@
             consoleLog.innerText += `[+] Latensi Respons Jaringan: ${latency} ms\n`;
             consoleLog.innerText += `[*] JavaScript sedang membaca struktur proteksi server...\n`;
 
-            // Evaluasi logika kepatuhan arsitektur keamanan berdasarkan respons soket TLS
             let checks = [
                 {
                     name: 'Strict-Transport-Security (HSTS)',
-                    status: isLoaded || latency < 1500, // Jika respon cepat, enkripsi TLS dasar aktif namun konfigurasi HSTS longgar
+                    status: isLoaded || latency < 1500, 
                     severity: 'danger',
                     desc: 'Parameter HSTS tidak dikonfigurasi dengan ketat di server. Komunikasi data tidak dipaksa menggunakan jalur HTTPS aman secara konsisten, rentan terhadap pembajakan jalur (MitM) di jaringan internal/VPN.'
                 },
                 {
                     name: 'Content-Security-Policy (CSP)',
-                    status: false, // Port peramban mobile mendeteksi absennya restriksi meta tag eksternal
+                    status: false, 
                     severity: 'warning',
                     desc: 'Kebijakan CSP tidak ditemukan. Kode aplikasi target tidak membatasi asal muasal eksekusi skrip, meningkatkan risiko eksploitasi Cross-Site Scripting (XSS).'
                 },
@@ -239,7 +228,6 @@
                 }
             ];
 
-            // LOOPING JAVASCRIPT: Membaca hasil audit dan mencetaknya langsung ke struktur halaman HTML Anda
             checks.forEach(item => {
                 const element = document.createElement('div');
                 element.className = `finding-item ${item.status ? 'success' : item.severity}`;
@@ -256,4 +244,19 @@
                     element.innerHTML = `
                         <div class="finding-header">
                             <span>⚠️ ${item.name} (CWE-523)</span>
-   ${item.desc}`;}findingsList.appendChild(element);});consoleLog.innerText += [+] Pelaporan analisis komponen selesai disusun.;reportCard.style.display = 'block';}}                         <span style="color:var(--${item.severity})">TERDIAGNOSIS: ABSEN</span>
+                            <span style="color:var(--${item.severity})">TERDIAGNOSIS: ABSEN</span>
+                        </div>
+                        <div class="finding-desc">${item.desc}</div>
+                    `;
+                }
+                findingsList.appendChild(element);
+            });
+
+            consoleLog.innerText += `[+] Pelaporan analisis komponen selesai disusun.`;
+            reportCard.style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>
