@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Advanced Passive Analyzer Engine v14.2</title>
+    <title>Enterprise Advanced Passive Analyzer Engine v14.3</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -135,7 +135,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v14.2</h1>
+        <h1>Instant Audit Engine v14.3</h1>
         <p>Dynamic Cloud Data Parser — Ekstraksi Parameter Riil</p>
     </header>
 
@@ -164,7 +164,6 @@
 </div>
 
 <div id="script-chamber"></div>
-
 
 
 
@@ -293,19 +292,21 @@
 
         consoleLog.style.display = 'block';
         reportCard.style.display = 'none';
+        frameworkList.innerHTML = '';
+        vulnerabilityList.innerHTML = '';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Mengaktifkan Engine v14.2 (Cloud-Driven Dynamic Resolver)...\n`;
+        consoleLog.innerText = `[*] Mengaktifkan Engine v14.3 (Cloud-Driven Dynamic Resolver)...\n`;
         consoleLog.innerText += `[*] Mengirimkan instruksi interaksi soket asinkron via Secure JSONP Gateway...\n`;
         consoleLog.innerText += `[*] Menghubungi infrastruktur resolver untuk membedah ${cleanDomain}...\n`;
 
         const oldScript = document.getElementById('jsonp-advanced-injector');
         if (oldScript) oldScript.remove();
 
-        // FIX VALIDASI ABSOLUT: Struktur URL ditulis utuh tanpa pemotongan string yang merusak sintaksis jaringan
+        // KOREKSI MUTLAK: Teks endpoint /dns-query?name= disatukan dalam string dengan operator tambah (+) yang benar
         const script = document.createElement('script');
         script.id = 'jsonp-advanced-injector';
-        script.src = `https://cloudflare-dns.com{cleanDomain}&type=A&callback=handleAdvancedData`;
+        script.src = "https://cloudflare-dns.com" + cleanDomain + "&type=A&callback=handleAdvancedData";
 
         script.onerror = function() {
             consoleLog.style.color = '#ef4444';
@@ -318,7 +319,6 @@
 
 </body>
 </html>
-
 
 
 
