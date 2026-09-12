@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise Advanced Passive Analyzer Engine v14.1</title>
+    <title>Enterprise Advanced Passive Analyzer Engine v14.2</title>
     <style>
         :root {
             --bg-dark: #090d16;
@@ -135,7 +135,7 @@
 
 <div class="container">
     <header>
-        <h1>Instant Audit Engine v14.1</h1>
+        <h1>Instant Audit Engine v14.2</h1>
         <p>Dynamic Cloud Data Parser — Ekstraksi Parameter Riil</p>
     </header>
 
@@ -184,7 +184,7 @@
             return;
         }
 
-        consoleLog.innerText += `[+] Paket data analitik berhasil ditarik secara riil!\n`;
+        consoleLog.innerText += `[+] Paket data arsitektur berhasil ditarik secara riil!\n`;
         consoleLog.innerText += `[*] Engine sedang membongkar komponen teknis asli server...\n`;
 
         // 1. EKSTRAKSI DATA JARINGAN NYATA
@@ -295,17 +295,17 @@
         reportCard.style.display = 'none';
         consoleLog.style.color = '#22c55e';
         
-        consoleLog.innerText = `[*] Mengaktifkan Engine v14.1 (Cloud-Driven Dynamic Resolver)...\n`;
+        consoleLog.innerText = `[*] Mengaktifkan Engine v14.2 (Cloud-Driven Dynamic Resolver)...\n`;
         consoleLog.innerText += `[*] Mengirimkan instruksi interaksi soket asinkron via Secure JSONP Gateway...\n`;
         consoleLog.innerText += `[*] Menghubungi infrastruktur resolver untuk membedah ${cleanDomain}...\n`;
 
         const oldScript = document.getElementById('jsonp-advanced-injector');
         if (oldScript) oldScript.remove();
 
-        // PERBAIKAN TOTAL FORMAT STRINGS: Menggunakan tanda tambah (+) dan memisahkan endpoint kueri secara utuh
+        // FIX VALIDASI ABSOLUT: Struktur URL ditulis utuh tanpa pemotongan string yang merusak sintaksis jaringan
         const script = document.createElement('script');
         script.id = 'jsonp-advanced-injector';
-        script.src = "https://cloudflare-dns.com" + cleanDomain + "&type=A&callback=handleAdvancedData";
+        script.src = `https://cloudflare-dns.com{cleanDomain}&type=A&callback=handleAdvancedData`;
 
         script.onerror = function() {
             consoleLog.style.color = '#ef4444';
@@ -318,6 +318,9 @@
 
 </body>
 </html>
+
+
+
 
 
     
